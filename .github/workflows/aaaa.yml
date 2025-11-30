@@ -15,8 +15,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      # Projeyi ve git geçmişini çek (Commit adımı için gerekli)
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }} # PAT token'ı kullanıyoruz
+          fetch-depth: 0 # Tüm geçmişi çek (isteğe bağlı ama önerilir)
+
       # --- 1) PR Listesini API ile Al (En Küçük PR) ---
       - name: Fetch Smallest Open PR via API
+        id: fetch_pr
         shell: pwsh
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
@@ -29,28 +37,35 @@ jobs:
               Accept        = "application/vnd.github.v3+json"
           }
 
-          # İlk 100 açık PR'i çek (daha fazlası için pagination gerekir)
+          # İlk 100 açık PR'i çek
           $url = "https://api.github.com/repos/$env:REPO_NAME/pulls?state=open&per_page=100"
           $prs = Invoke-RestMethod -Headers $headers -Uri $url -Method Get
 
           if (-not $prs) {
               Write-Host "⚠️ Açık PR bulunamadı. İşlem atlanıyor."
+              echo "PR_NUMBER=0" >> $env:GITHUB_OUTPUT
               exit 0
           }
 
-          # PR numaralarını al
-          $prNumbers = $prs | ForEach-Object { $_.number }
+          # PR numaralarını al ve en küçük olanı bul
+          $minPRNumber = ($prs | Select-Object -ExpandProperty number | Measure-Object -Minimum).Minimum
 
-          # En küçük PR numarasını bul
-          $minPRNumber = ($prNumbers | Measure-Object -Minimum).Minimum
-
-          # En küçük PR'nin repository bilgisini al
+          # En küçük PR'yi bul
           $minPR = $prs | Where-Object { $_.number -eq $minPRNumber }
 
-          "$($minPR.number) $($minPR.head.repo.full_name)" | Set-Content -Path "pr_list.txt"
+          # Sonraki adımlar için gerekli bilgiyi dosyaya kaydet
+          "$($minPR.number) $($minPR.head.repo.full_name)" | Set-Content -Path "pr_info.txt"
+          
           Write-Host "✅ En küçük PR numarası kaydedildi: $($minPR.number)"
+          echo "PR_NUMBER=$minPRNumber" >> $env:GITHUB_OUTPUT
 
-
+      # PR bulunamazsa sonraki adımları atla
+      - name: Skip if No PR Found
+        if: steps.fetch_pr.outputs.PR_NUMBER == '0'
+        run: |
+          Write-Host "Açık PR bulunmadığı için sonraki adımlar atlanıyor."
+          exit 0
+          
       # --- 2) PR Dosyalarını API ile İndir ---
       - name: Fetch PR Files
         shell: pwsh
@@ -61,14 +76,13 @@ jobs:
           $tempDir = "process_tmp"
           New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
 
-          foreach ($line in Get-Content "pr_list.txt") {
+          foreach ($line in Get-Content "pr_info.txt") {
               $parts = $line.Split(' ')
               $prNumber = $parts[0]
-              $headRepo = $parts[1]
+              # $headRepo = $parts[1] # Bu bilgiyi bu adımda kullanmıyoruz
 
-              Write-Host "📥 PR #$prNumber ($headRepo) dosyaları çekiliyor..."
+              Write-Host "📥 PR #$prNumber dosyaları çekiliyor..."
 
-              # Fork ise atla merge ama dosya çekmeye izin var
               $page = 1
               do {
                   $url = "https://api.github.com/repos/$env:REPO_NAME/pulls/$prNumber/files?per_page=100&page=$page"
@@ -80,6 +94,8 @@ jobs:
                       $fullPath = Join-Path $tempDir $file.filename
                       $dir = Split-Path -Parent $fullPath
                       if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+                      
+                      # RAW URL'den dosya içeriğini indir
                       Invoke-WebRequest -Uri $file.raw_url -OutFile $fullPath -ErrorAction Stop
                       Write-Host "⬇️ $($file.filename) indirildi"
                   }
@@ -88,21 +104,28 @@ jobs:
               } while ($files.Count -eq 100)
           }
           
-      # --- 3) Depot Dumper Tool ---
-      - name: Download Depot Dumper Tool
+      # --- 3) Depot Dumper Tool Kaynak Kodunu İndir ---
+      - name: Download Depot Dumper Tool Source
         shell: pwsh
         run: |
           $toolDir = "DepotDumper"
-          if (-not (Test-Path $toolDir)) { 
-              Write-Host "🛠️ DepotDumper klasörü indiriliyor..."
-              git clone https://github.com/DogancanYr/Steam_Manifest_Depot.git $toolDir
-          } else { 
-              Write-Host "✅ DepotDumper klasörü zaten var, güncelleniyor..."
-              Push-Location $toolDir
-              git pull
-              Pop-Location
-          }
+          Write-Host "🛠️ DepotDumper klasörü indiriliyor..."
+          git clone https://github.com/DogancanYr/Steam_Manifest_Depot.git $toolDir
 
+      # --- 3.5) Depot Dumper Tool'u Derle (Eksik Olan Adım) ---
+      - name: Build Depot Dumper Tool
+        shell: pwsh
+        run: |
+          # .NET Core SDK'nın yüklü olduğu varsayılır (windows-latest üzerinde varsayılan).
+          $projectPath = Join-Path $PWD "DepotDumper\DepotDownloader"
+          
+          Write-Host "⚙️ DepotDownloader projesi derleniyor..."
+          Push-Location $projectPath
+          
+          # Release konfigürasyonunda derle
+          dotnet build -c Release
+          Pop-Location
+          
       # --- 4) Depot İşlemi ---
       - name: Run Depot Dumper and Collect Files
         shell: pwsh
@@ -112,7 +135,16 @@ jobs:
         run: |
           $inputDir = "process_tmp"
           $outputDir = New-Item -ItemType Directory -Path "collected" -Force
-          $depotExe = Join-Path $PWD "DepotDumper\Depot.exe"
+          
+          # Derlenmiş DLL yolunu belirle (genellikle net6.0 veya benzeri bir framework klasöründedir)
+          # Proje adı 'DepotDownloader' olduğu için DLL adı da bu şekilde olmalıdır.
+          # Net framework versiyonunu bulmak için alt klasörleri ara:
+          $buildDir = Get-ChildItem -Path (Join-Path $PWD "DepotDumper\DepotDownloader\bin\Release") -Directory | Select-Object -First 1
+          if (-not $buildDir) {
+              Write-Error "Derlenmiş DLL klasörü bulunamadı. Lütfen hedef framework'ü kontrol edin."
+              exit 1
+          }
+          $depotDllPath = Join-Path $buildDir.FullName "DepotDownloader.dll"
 
           if (-not (Test-Path $inputDir)) { exit 0 }
 
@@ -133,11 +165,14 @@ jobs:
               $appId = $parts[0].Trim()
               $token = $parts[1].Trim()
 
+              Write-Host "⚙️ $appId için Depot Dumper çalıştırılıyor..."
               Push-Location $outputDir
               try {
-                  & "$depotExe" -username $env:DEPOT_USER -password $env:DEPOT_PASS -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
+                  # DLL'i dotnet ile çalıştırıyoruz
+                  & dotnet "$depotDllPath" -username $env:DEPOT_USER -password $env:DEPOT_PASS -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
               } catch {
                   Write-Error "Depot Dumper hatası: $_"
+                  # Hata oluşsa bile diğer PR'lara geçmek için devam ediyoruz.
               } finally { Pop-Location }
           }
 
@@ -146,16 +181,22 @@ jobs:
         shell: pwsh
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-          REPO_NAME: ${{ github.repository }}
           BRANCH: main  # Veya istediğin branch
         run: |
-          git init
-          git remote add origin https://x-access-token:$env:PAT_TOKEN@github.com/$env:REPO_NAME.git
+          # Checkout yapıldığı için yeniden init/remote eklemeye gerek yok
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Yalnızca 'collected' içindeki değişiklikleri ekle
           git add collected/
-          if (git diff --cached --quiet) { Write-Host "ℹ️ Yeni değişiklik yok." }
+          
+          # Değişiklik var mı kontrol et
+          if (git diff --cached --quiet) { 
+              Write-Host "ℹ️ Yeni değişiklik yok. Commit atlanıyor." 
+          }
           else {
-              git commit -m "Auto-process: Added depot files from PRs"
-              git push origin HEAD:$env:BRANCH
+              $prNumber = (Get-Content "pr_info.txt").Split(' ')[0]
+              git commit -m "Auto-process: Added depot files from PR #${prNumber}"
+              Write-Host "🚀 Değişiklikler $env:BRANCH branch'ine push ediliyor..."
+              git push 
           }
