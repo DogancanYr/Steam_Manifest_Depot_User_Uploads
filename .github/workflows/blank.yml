@@ -5,18 +5,15 @@
         run: |
           echo "Fetching PR list..."
 
-          # PR numaralarını satır satır al
           PRS=$(curl -s \
             -H "Authorization: token $TOKEN" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$REPO/pulls?state=open&per_page=100" \
             | jq -r '.[].number' | sort -n)
 
-          echo "Sorted PRs:"
-          echo "$PRS"
+          echo "Sorted PRs: $PRS"
 
-          # Döngü ile her PR'yi merge et ve sonra 10 saniye bekle
-          while IFS= read -r PR; do
+          for PR in $PRS; do
             echo "Merging PR #$PR ..."
 
             curl -s -X PUT \
@@ -28,4 +25,4 @@
             echo "Waiting 10 seconds before next PR..."
             sleep 10
             echo ""
-          done <<< "$PRS"
+          done
