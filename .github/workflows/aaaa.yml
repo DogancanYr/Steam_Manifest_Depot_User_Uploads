@@ -1,176 +1,55 @@
-name: PR Depot Process Optimized (No Checkout)
+name: Auto Merge All PRs
 
-# İş akışını her 5 dakikada bir çalıştırır.
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/1 * * * *'
   workflow_dispatch:
 
-# İşlem için gerekli izinler
-permissions:
-  contents: write    # Repository'ye commit/push yapabilmek için
-
 jobs:
-  process:
-    name: Process Steam Depot Files
-    runs-on: windows-latest # Depot.exe çalıştığı için Windows kullanılıyor
+  auto-merge:
+    runs-on: ubuntu-latest
 
     steps:
-      # --- 1) Repo'yu Klonla ve Branch'i Ayarla (actions/checkout yerine) ---
-      - name: Git Clone and Setup
-        shell: bash
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Merge all PRs in ascending order with retries
         env:
-          # Push ve fetch işlemleri için token
-          TOKEN: ${{ secrets.ACTIONS_PAT || secrets.GITHUB_TOKEN }}
-          BRANCH: ${{ github.ref_name || 'main' }} # Varsayılan branch'i tahmin et
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+          REPO: ${{ github.repository }}
+          MAX_RETRIES: 3
         run: |
-          echo "Başlangıç branch'i: $BRANCH"
-          
-          # Git ayarlarını yap
-          git config --global user.name "DogancanYr"
-          git config --global user.email "DogancanYr@users.noreply.github.com"
+          echo "Fetching PR list..."
 
-          # Repo'yu klonla (derinliği sınırlı)
-          git clone --depth 1 "https://x-access-token:$TOKEN@github.com/${{ github.repository }}" .
+          PRS=$(curl -s \
+            -H "Authorization: token $TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/pulls?state=open&per_page=100" \
+            | jq -r '.[].number' | sort -n)
 
-          # Doğru branch'i kontrol et ve en son değişiklikleri çek
-          git fetch origin
-          git checkout $BRANCH
-          git pull origin $BRANCH
+          echo "Sorted PRs: $PRS"
 
-      # --- 2) Gerekli Dosyaları Topla ---
-      # Repo klonlandığı için dosyalar zaten yerel dizinde.
-      # İşlemlerin bir ara dizinde yapılabilmesi için *_pkgs.txt dosyalarının bulunduğu 
-      # tüm dosyaları bir 'process_tmp' dizinine kopyalamak.
-      - name: Copy Depot Files to Processing Directory
-        shell: pwsh
-        run: |
-          Write-Host "📂 İşlenecek dosyalar process_tmp klasörüne kopyalanıyor..."
-          $inputDir = "." # Klonlanan repo dizini
-          $tempDir = New-Item -ItemType Directory -Path "process_tmp" -Force
-          
-          # Depo dosyalarınızı (örneğin *_pkgs.txt ve *_keys.txt) içeren tüm dosyaları kopyala
-          # NOT: Bu kopyalama, 'collected' ve 'DepotDumper' gibi çıktı/ara dizinleri hariç tutmalıdır.
-          Get-ChildItem -Path $inputDir -Recurse | Where-Object { 
-              $_.PSIsContainer -or $_.Name -like "*_pkgs.txt" -or $_.Name -like "*_keys.txt" 
-          } | Copy-Item -Destination { Join-Path $tempDir $_.FullName.Substring($inputDir.Length) } -Force
+          for PR in $PRS; do
+            echo "Processing PR #$PR ..."
 
-          # İstenmeyen klasörleri hariç tut (Bu adım, hatalı kopyalamayı önler)
-          Remove-Item -Path "process_tmp\collected" -Recurse -Force -ErrorAction SilentlyContinue
-          Remove-Item -Path "process_tmp\DepotDumper" -Recurse -Force -ErrorAction SilentlyContinue
+            for attempt in $(seq 1 $MAX_RETRIES); do
+              RESPONSE=$(curl -s -X PUT \
+                -H "Authorization: token $TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/$REPO/pulls/$PR/merge" \
+                -d '{"merge_method":"squash"}')
 
-          Write-Host "✅ Dosyalar kopyalandı. process_tmp içeriği (bazı dosyalar/klasörler atlanabilir):"
-          Get-ChildItem -Path $tempDir -Recurse | Select-Object FullName
-          Write-Host "----------------------------------"
+              MESSAGE=$(echo $RESPONSE | jq -r '.message // empty')
 
-      # --- 3) Depot Tools İndir ---
-      - name: Download Depot Dumper Tool
-        shell: pwsh
-        run: |
-          $toolDir = New-Item -ItemType Directory -Path "DepotDumper" -Force
-          $toolUrl = "https://raw.githubusercontent.com/DogancanYr/Steam_Manifest_Depot/main/DepotDumper/Depot.exe"
-          
-          Write-Host "🛠️ Depot.exe indiriliyor..."
-          Invoke-WebRequest -Uri $toolUrl -OutFile (Join-Path $toolDir "Depot.exe") -ErrorAction Stop
-
-          Write-Host "✅ Depot.exe indirildi."
-
-      # --- 4) Depot İşlemi (Secrets Kullanarak) ---
-      - name: Run Depot Dumper and Collect Files
-        id: depot_run
-        shell: pwsh
-        env:
-          DEPOT_USER: ${{ secrets.DEPOT_USERNAME }}  
-          DEPOT_PASS: ${{ secrets.DEPOT_PASSWORD }}
-        run: |
-          $ErrorActionPreference = 'Stop'
-          
-          $inputDir = "process_tmp"
-          $outputDir = New-Item -ItemType Directory -Path "collected" -Force
-          $depotExe = Join-Path $PWD "DepotDumper\Depot.exe"
-
-          if (-not (Test-Path $inputDir)) {
-              Write-Host "ℹ️ İşlenecek dosya klasörü (process_tmp) yok, işlem atlanıyor."
-              exit 0
-          }
-
-          # *_pkgs.txt dosyalarını bul
-          $pkgFiles = Get-ChildItem -Path $inputDir -Filter '*_pkgs.txt' -Recurse -File
-
-          if ($pkgFiles.Count -eq 0) {
-              Write-Warning "⚠️ İşlenecek *_pkgs.txt dosyası bulunamadı. İşlem başarıyla atlanıyor."
-              exit 0
-          }
-
-          Write-Host "✔️ *_pkgs.txt dosyaları bulundu: $($pkgFiles.Count)"
-
-          foreach ($pkg in $pkgFiles) {
-          
-              $pkgPath = $pkg.FullName
-              $pkgDirectory = Split-Path -Parent $pkgPath
-              $prefix = $pkg.BaseName -replace '_pkgs$', ''
-              $keyFile = Join-Path $pkgDirectory "${prefix}_keys.txt"
-
-              if (-not (Test-Path $keyFile)) {
-                  Write-Warning "⚠️ $($pkg.Name) için anahtar dosyası bulunamadı. Atlanıyor."
-                  continue
-              }
-
-              Write-Host "🚀 İşleniyor: $($pkg.Name)"
-
-              $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' }  
-              $firstLine = $content.Trim().Split("`n")[0]
-              $parts = $firstLine -split ';'
-
-              if ($parts.Count -lt 2) {
-                  Write-Error "❌ Format hatası: $($pkg.Name). (app;token formatında olmalı)"
-                  continue
-              }
-
-              $appId = $parts[0].Trim()
-              $token = $parts[1].Trim()
-              Write-Host "    AppID: $appId"
-
-              # --- TRY / CATCH / FINALLY ---
-              Push-Location $outputDir
-              try {
-                  # Gizli anahtarlar ile çalıştır
-                  & $depotExe -username $env:DEPOT_USER -password $env:DEPOT_PASS -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
-                  Write-Host "✅ $($pkg.Name) işlemi tamamlandı."
-              }
-              catch {
-                  Write-Error "❌ Depot Dumper hatası: $_"
-              }
-              finally {
-                  Pop-Location
-              }
-          } # foreach kapanışı
-
-          Write-Host "--- collected Klasör İçeriği ---"
-          Get-ChildItem -Path $outputDir -Recurse | Select-Object FullName
-          Write-Host "--------------------------------"
-
-      # --- 5) Sonuçları Commit ve Push Et (Klonlanan Repo İçine) ---
-      - name: Commit and Push Results
-        shell: bash # Git komutları için Bash kullanılır
-        env:
-          TOKEN: ${{ secrets.ACTIONS_PAT || secrets.GITHUB_TOKEN }}
-        run: |
-          # Sadece 'collected' klasöründeki değişiklikleri takip et
-          git add collected/
-          
-          # Commit edilecek bir değişiklik var mı kontrol et
-          if git diff --cached --quiet; then
-            echo "ℹ️ collected/ klasöründe yeni değişiklik yok, push yapılmayacak."
-          else
-            echo "📦 Yeni Depot dosyaları commitleniyor..."
-            
-            # Commit mesajı, zamanlanmış çalıştırmayı yansıtır
-            git commit -m "Auto-process: Added depot files from scheduled run ${{ github.sha }}"
-            
-            # Klonlanan branch'e (HEAD) push et
-            # Kimlik doğrulama için token kullanılır
-            git push
-            
-            echo "✅ Değişiklikler başarıyla push edildi."
-          fi
+              if [ "$MESSAGE" == "" ]; then
+                echo "PR #$PR merged successfully."
+                break
+              elif [[ "$MESSAGE" == *"Base branch was modified"* ]]; then
+                echo "PR #$PR cannot merge because base branch changed. Retrying in 5 seconds... (Attempt $attempt/$MAX_RETRIES)"
+                sleep 5
+              else
+                echo "PR #$PR merge failed: $MESSAGE"
+                break
+              fi
+            done
+          done
