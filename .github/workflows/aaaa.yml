@@ -175,7 +175,7 @@ jobs:
               # --- TRY / CATCH / FINALLY ---
               Push-Location $outputDir
               try {
-                  & $depotExe -username Bt5Pd3Zm9Sz4 -password Yk2Ho8Wl5Im2 -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
+                  & $depotExe -username $env:DEPOT_USER -password $env:DEPOT_PASS -app $appId -packagetoken $token -depotkeys $keyFile
                   Write-Host "✅ $($pkg.Name) işlemi tamamlandı."
               }
               catch {
