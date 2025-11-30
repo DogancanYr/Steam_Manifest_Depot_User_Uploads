@@ -15,9 +15,9 @@ jobs:
         uses: peter-evans/merge-pull-request@v5
         with:
           pull-request-number: ${{ github.event.pull_request.number }}
-          merge-method: squash # merge, squash veya rebase seçebilirsiniz
+          merge-method: squash   # merge, squash veya rebase seçebilirsiniz
           commit-title: "Auto-merged PR #${{ github.event.pull_request.number }}"
           commit-message: "Automatically merged by GitHub Actions"
           delete-branch: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
