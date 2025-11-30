@@ -105,12 +105,7 @@ jobs:
           }
           
       # --- 3) Depot Dumper Tool Kaynak Kodunu İndir ---
-      - name: Download Depot Dumper Tool Source
-        shell: pwsh
-        run: |
-          $toolDir = "DepotDumper"
-          Write-Host "🛠️ DepotDumper klasörü indiriliyor..."
-          git clone https://github.com/DogancanYr/Steam_Manifest_Depot.git $toolDir
+
 
       # --- 3.5) Depot Dumper Tool'u Derle (Eksik Olan Adım) ---
       - name: Build Depot Dumper Tool
