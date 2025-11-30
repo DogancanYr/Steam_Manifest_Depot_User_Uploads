@@ -135,7 +135,7 @@ jobs:
 
               Push-Location $outputDir
               try {
-                  & $depotExe -username $env:DEPOT_USER -password $env:DEPOT_PASS -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
+                  & "$depotExe" -username $env:DEPOT_USER -password $env:DEPOT_PASS -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
               } catch {
                   Write-Error "Depot Dumper hatası: $_"
               } finally { Pop-Location }
