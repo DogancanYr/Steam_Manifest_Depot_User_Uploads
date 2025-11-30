@@ -3,7 +3,7 @@ name: PR Depot Process Optimized API-Only
 on:
   schedule:
     - cron: '*/5 * * * *'  # Her 5 dakikada bir çalışacak
-workflow_dispatch:
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -15,35 +15,40 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # --- 1) Tüm Açık PR'leri Al ve En Küçüğünü Seç ---
-      Write-Host "📋 Tüm açık PR'ler çekiliyor..."
-      
-      $headers = @{
-          Authorization = "token $env:PAT_TOKEN"
-          Accept        = "application/vnd.github.v3+json"
-      }
+      # --- 1) PR Listesini API ile Al (En Küçük PR) ---
+      - name: Fetch Smallest Open PR via API
+        shell: pwsh
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          Write-Host "📋 Tüm açık PR'ler çekiliyor..."
 
-      $url = "https://api.github.com/repos/$env:REPO_NAME/pulls?state=open&per_page=100"
-      $prs = Invoke-RestMethod -Headers $headers -Uri $url -Method Get
+          $headers = @{
+              Authorization = "token $env:PAT_TOKEN"
+              Accept        = "application/vnd.github.v3+json"
+          }
 
-      if (-not $prs) {
-          Write-Host "⚠️ Açık PR bulunamadı. İşlem atlanıyor."
-          exit 0
-      }
+          # İlk 100 açık PR'i çek (daha fazlası için pagination gerekir)
+          $url = "https://api.github.com/repos/$env:REPO_NAME/pulls?state=open&per_page=100"
+          $prs = Invoke-RestMethod -Headers $headers -Uri $url -Method Get
 
-      # PR numaralarını al
-      $prNumbers = $prs | ForEach-Object { $_.number }
+          if (-not $prs) {
+              Write-Host "⚠️ Açık PR bulunamadı. İşlem atlanıyor."
+              exit 0
+          }
 
-      # En küçük PR numarasını bul
-      $minPRNumber = ($prNumbers | Measure-Object -Minimum).Minimum
+          # PR numaralarını al
+          $prNumbers = $prs | ForEach-Object { $_.number }
 
-      # En küçük PR'nin repository bilgisini al
-      $minPR = $prs | Where-Object { $_.number -eq $minPRNumber }
+          # En küçük PR numarasını bul
+          $minPRNumber = ($prNumbers | Measure-Object -Minimum).Minimum
 
-      "$($minPR.number) $($minPR.head.repo.full_name)" | Set-Content -Path "pr_list.txt"
+          # En küçük PR'nin repository bilgisini al
+          $minPR = $prs | Where-Object { $_.number -eq $minPRNumber }
 
-      Write-Host "✅ En küçük PR numarası kaydedildi: $($minPR.number)"
-
+          "$($minPR.number) $($minPR.head.repo.full_name)" | Set-Content -Path "pr_list.txt"
+          Write-Host "✅ En küçük PR numarası kaydedildi: $($minPR.number)"
 
 
       # --- 2) PR Dosyalarını API ile İndir ---
