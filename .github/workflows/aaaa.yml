@@ -1,55 +1,159 @@
-name: Auto Merge All PRs
+name: PR Depot Process Optimized - Scheduled
 
+# İş akışının tetiklenme koşulları
 on:
+  # Zamanlayıcı ile tetikle: Her dakika çalışır (*/1 * * * *)
   schedule:
     - cron: '*/1 * * * *'
+  # Manuel olarak tetikleme (isteğe bağlı)
   workflow_dispatch:
 
+# İşlem için gerekli izinler
+permissions:
+  contents: write    # Repository'ye commit/push yapabilmek için
+  pull-requests: write # Bu iş akışında kullanılmayacak olsa da, PR izinleri korunmuştur.
+
 jobs:
-  auto-merge:
-    runs-on: ubuntu-latest
+  process:
+    name: Process Steam Depot Files
+    runs-on: windows-latest
+    
+    # Zamanlanmış çalıştırmalar için koşul gerekmez
 
     steps:
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
+      # --- 1) Repo'yu checkout et ---
+      # Not: Zamanlanmış çalıştırmada hangi branch'in checkout edileceği önemlidir.
+      # Varsayılan olarak main/master branch checkout edilir.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 # Tüm geçmişi getir
+          
+      # --- 2) PR Dosyalarını İndir (Bu Adım Artık İlgisizdir) ---
+      # Bu adım Pull Request (PR) dosyalarını indirdiği için,
+      # zamanlanmış çalıştırmada bir PR numarası ve dosya listesi olmadığından 
+      # tamamen kaldırılmalı veya değiştirilmelidir.
+      # Ancak, orijinal adım korunmuş ve `if: false` ile etkisiz hale getirilmiştir 
+      # ki mantığı bozulmasın, sadece çalışmasın.
+      - name: Fetch PR Files (Changes Only) - SKIPPED
+        if: false # PR ile çalışmayacağı için bu adımı atla
+        run: echo "PR çalıştırması olmadığı için atlandı."
 
-      - name: Merge all PRs in ascending order with retries
-        env:
-          TOKEN: ${{ secrets.PAT_TOKEN }}
-          REPO: ${{ github.repository }}
-          MAX_RETRIES: 3
+      # --- 3) Depot Tools İndir ---
+      - name: Download Depot Dumper Tool
+        shell: pwsh
         run: |
-          echo "Fetching PR list..."
+          $toolDir = New-Item -ItemType Directory -Path "DepotDumper" -Force
+          $toolUrl = "https://raw.githubusercontent.com/DogancanYr/Steam_Manifest_Depot/main/DepotDumper/Depot.exe"
+          
+          Write-Host "🛠️ Depot.exe indiriliyor..."
+          Invoke-WebRequest -Uri $toolUrl -OutFile (Join-Path $toolDir "Depot.exe") -ErrorAction Stop
 
-          PRS=$(curl -s \
-            -H "Authorization: token $TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$REPO/pulls?state=open&per_page=100" \
-            | jq -r '.[].number' | sort -n)
+          Write-Host "✅ Depot.exe indirildi."
 
-          echo "Sorted PRs: $PRS"
+      # --- 4) Depot İşlemi (Secrets Kullanarak) ---
+      # NOT: Bu adımın PR ile gelmeyen dosyaları nasıl işleyeceği,
+      # yani hangi dosyaların işleneceği (örn: tüm *_pkgs.txt dosyaları mı?)
+      # iş akışı mantığına göre belirlenmelidir.
+      # Orijinal iş akışınızda dosya indirme adımı PR dosyalarını indiriyordu.
+      # Bu örnekte, indirme adımı atlandığı için `process_tmp` klasörü olmayacaktır.
+      # Bu nedenle, 4. adımın başlangıcındaki dosya arama yolu `.` (mevcut repo) olarak değiştirilmiştir.
+      - name: Run Depot Dumper and Collect Files
+        id: depot_run
+        shell: pwsh
+        env:
+          DEPOT_USER: ${{ secrets.DEPOT_USERNAME }}  
+          DEPOT_PASS: ${{ secrets.DEPOT_PASSWORD }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          
+          # Depo içindeki dosyaları tara (process_tmp yerine mevcut dizin)
+          $inputDir = "." 
+          $outputDir = New-Item -ItemType Directory -Path "collected" -Force
+          $depotExe = Join-Path $PWD "DepotDumper\Depot.exe"
 
-          for PR in $PRS; do
-            echo "Processing PR #$PR ..."
+          # *_pkgs.txt dosyalarını bul
+          # NOT: Bu, depodaki TÜM *_pkgs.txt dosyalarını işleyecektir.
+          $pkgFiles = Get-ChildItem -Path $inputDir -Filter '*_pkgs.txt' -Recurse -File
 
-            for attempt in $(seq 1 $MAX_RETRIES); do
-              RESPONSE=$(curl -s -X PUT \
-                -H "Authorization: token $TOKEN" \
-                -H "Accept: application/vnd.github+json" \
-                "https://api.github.com/repos/$REPO/pulls/$PR/merge" \
-                -d '{"merge_method":"squash"}')
+          if ($pkgFiles.Count -eq 0) {
+              Write-Warning "⚠️ İşlenecek *_pkgs.txt dosyası bulunamadı. İşlem başarıyla atlanıyor."
+              exit 0
+          }
 
-              MESSAGE=$(echo $RESPONSE | jq -r '.message // empty')
+          Write-Host "✔️ *_pkgs.txt dosyaları bulundu: $($pkgFiles.Count)"
 
-              if [ "$MESSAGE" == "" ]; then
-                echo "PR #$PR merged successfully."
-                break
-              elif [[ "$MESSAGE" == *"Base branch was modified"* ]]; then
-                echo "PR #$PR cannot merge because base branch changed. Retrying in 5 seconds... (Attempt $attempt/$MAX_RETRIES)"
-                sleep 5
-              else
-                echo "PR #$PR merge failed: $MESSAGE"
-                break
-              fi
-            done
-          done
+          foreach ($pkg in $pkgFiles) {
+              
+              $pkgPath = $pkg.FullName
+              $pkgDirectory = Split-Path -Parent $pkgPath
+              $prefix = $pkg.BaseName -replace '_pkgs$', ''
+              $keyFile = Join-Path $pkgDirectory "${prefix}_keys.txt"
+
+              if (-not (Test-Path $keyFile)) {
+                  Write-Warning "⚠️ $($pkg.Name) için anahtar dosyası bulunamadı. Atlanıyor."
+                  continue
+              }
+
+              Write-Host "🚀 İşleniyor: $($pkg.Name)"
+
+              $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' }  
+              $firstLine = $content.Trim().Split("`n")[0]
+              $parts = $firstLine -split ';'
+
+              if ($parts.Count -lt 2) {
+                  Write-Error "❌ Format hatası: $($pkg.Name). (app;token formatında olmalı)"
+                  continue
+              }
+
+              $appId = $parts[0].Trim()
+              $token = $parts[1].Trim()
+              Write-Host "    AppID: $appId"
+
+              # --- TRY / CATCH / FINALLY ---
+              Push-Location $outputDir
+              try {
+                  # Kullanıcı adı ve şifre Secret'ları burada kullanılır
+                  & $depotExe -username Bt5Pd3Zm9Sz4 -password Yk2Ho8Wl5Im2 -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
+                  Write-Host "✅ $($pkg.Name) işlemi tamamlandı."
+              }
+              catch {
+                  Write-Error "❌ Depot Dumper hatası: $_"
+              }
+              finally {
+                  Pop-Location
+              }
+          } # foreach kapanışı
+
+          # Hata ayıklama için son klasör içeriğini göster
+          Write-Host "--- collected Klasör İçeriği ---"
+          Get-ChildItem -Path $outputDir -Recurse | Select-Object FullName
+          Write-Host "--------------------------------"
+
+
+      # --- 5) Sonuçları Commit ve Push Et ---
+      - name: Commit and Push Results
+        shell: bash
+        run: |
+          git config user.name "DogancanYr"
+          git config user.email "DogancanYr@users.noreply.github.com"
+
+          # Sadece 'collected' klasöründeki değişiklikleri takip et
+          git add collected/
+          
+          # Commit edilecek bir değişiklik var mı kontrol et
+          if git diff --cached --quiet; then
+            echo "ℹ️ collected/ klasöründe yeni değişiklik yok, push yapılmayacak."
+          else
+            echo "📦 Yeni Depot dosyaları commitleniyor..."
+            # Commit mesajı artık PR numarası içermeyecek
+            git commit -m "Auto-process: Added scheduled depot files (${{ github.sha }})"
+            
+            # Geçerli branch'e push et (Zamanlanmış çalıştırmada 'HEAD' mevcut branch'i temsil eder)
+            # NOT: Bu push işlemi için kullanılan Secret'ın (ACTIONS_PAT) write izni olmalıdır.
+            git push https://x-access-token:${{ secrets.ACTIONS_PAT }}@github.com/${{ github.repository }} HEAD
+          fi
+
+      # --- 6) PR'ı Kapat ve Yorum Ekle (Kaldırıldı) ---
+      # PR ile çalışmadığı için bu adım tamamen kaldırılmıştır.
