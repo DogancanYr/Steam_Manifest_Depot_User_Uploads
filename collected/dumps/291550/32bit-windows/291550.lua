@@ -5,6 +5,8 @@ addappid(291552, 1, "7bc0a2d1a917e8f3c0046aa1281e248a5e40491c7af4a03e28703b734a1
 setManifestid(291552, "8726608285789078485", 0)
 
 
+
+
 addappid(297630) -- Brawlhalla - Founders Pack
 addappid(298640) -- Brawlhalla - Founders and Friends Pack
 addappid(298641) -- Brawlhalla - Collectors Pack

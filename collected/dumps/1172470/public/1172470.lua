@@ -21,6 +21,8 @@ addappid(1311105, 1, "70fc46e692a1da85e402ead6bfce0fc11831de7b9597a24ec40cff53b0
 setManifestid(1311105, "6048415564646653751", 0)
 
 
+
+
 addappid(1311090) -- Apex Legends™ - Lifeline Edition
 addappid(1311091) -- Apex Legends™ - Bloodhound Edition
 addappid(1311092) -- Apex Legends™ - Lifeline and Bloodhound Double Pack

@@ -5,6 +5,8 @@ addappid(578082, 1, "6cbd9e8da0339346aeaafb966fd6a173ee898929b9ba4349550c5489234
 setManifestid(578082, "6203426191546330616", 0)
 
 
+
+
 addappid(888770) -- Event Pass: Sanhok
 addappid(990650) -- Survivor Pass: Vikendi
 addappid(1046180) -- Survivor Pass 3: Wild Card

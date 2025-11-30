@@ -23,6 +23,8 @@ addappid(2239581, 1, "8780ca840c8994c0aea640128c1627f27ed861e147aebcbe0b965a1645
 setManifestid(2239581, "2185846408303563524", 0)
 
 
+
+
 addappid(2239570) -- Watch Dogs: Legion Gold Edition Ubisoft Activation
 addappid(2239571) -- Watch Dogs: Legion Deluxe Edition Ubisoft Activation
 addappid(2239573) -- Watch Dogs: Legion Ultimate Edition Ubisoft Activation

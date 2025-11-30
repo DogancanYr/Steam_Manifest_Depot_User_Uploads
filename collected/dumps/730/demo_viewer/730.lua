@@ -7,6 +7,8 @@ addappid(733, 1, "23c8e9a91561a5fb08abf22f2ac98929f4aad68a12164268d3b2800c3db4fb
 setManifestid(733, "2103093205873127583", 0)
 
 
+
+
 addappid(1490530) -- Counter-Strike: Global Offensive - Operation Broken Fang
 addappid(1766730) -- CS:GO - Operation Riptide
 addappid(2279720) -- Counter-Strike 2 (Limited Test)
