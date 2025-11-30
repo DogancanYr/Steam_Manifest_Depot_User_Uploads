@@ -38,7 +38,7 @@ jobs:
           }
 
           # Sadece ilk PR’yi kaydet
-          $firstPR = $prs[0]
+          $firstPR = $prs[-1]
           "$($firstPR.number) $($firstPR.head.repo.full_name)" | Set-Content -Path "pr_list.txt"
 
 
@@ -79,16 +79,16 @@ jobs:
               } while ($files.Count -eq 100)
           }
 
-      # --- 3) Depot Tools İndir ---
       - name: Download Depot Dumper Tool
         shell: pwsh
         run: |
-          $toolDir = "DepotDumper"
-          New-Item -ItemType Directory -Path $toolDir -Force | Out-Null
+          $toolDir = New-Item -ItemType Directory -Path "DepotDumper" -Force
           $toolUrl = "https://raw.githubusercontent.com/DogancanYr/Steam_Manifest_Depot/main/DepotDumper/Depot.exe"
+          
+          Write-Host "🛠️ Depot.exe indiriliyor..."
           Invoke-WebRequest -Uri $toolUrl -OutFile (Join-Path $toolDir "Depot.exe") -ErrorAction Stop
-          Write-Host "✅ Depot.exe indirildi."
 
+          Write-Host "✅ Depot.exe indirildi."
       # --- 4) Depot İşlemi ---
       - name: Run Depot Dumper and Collect Files
         shell: pwsh
