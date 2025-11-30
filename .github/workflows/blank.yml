@@ -11,13 +11,35 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Auto merge pull request
+      - name: Determine if PR can be auto-merged
+        id: check
+        run: |
+          IS_FORK=false
+          HAS_LABEL=false
+
+          # PR fork mu?
+          if [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+            IS_FORK=true
+          fi
+
+          # 'auto-merge' label var mı?
+          for label in ${{ toJson(github.event.pull_request.labels) }}; do
+            if [[ "$label" == *"auto-merge"* ]]; then
+              HAS_LABEL=true
+            fi
+          done
+
+          echo "is_fork=$IS_FORK" >> $GITHUB_OUTPUT
+          echo "has_label=$HAS_LABEL" >> $GITHUB_OUTPUT
+
+      - name: Auto merge PR if allowed
+        if: ${{ github.repository == github.event.pull_request.head.repo.full_name || steps.check.outputs.has_label == 'true' }}
         uses: peter-evans/merge-pull-request@v5
         with:
           pull-request-number: ${{ github.event.pull_request.number }}
-          merge-method: squash   # merge, squash veya rebase seçebilirsiniz
+          merge-method: squash
           commit-title: "Auto-merged PR #${{ github.event.pull_request.number }}"
           commit-message: "Automatically merged by GitHub Actions"
           delete-branch: true
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
