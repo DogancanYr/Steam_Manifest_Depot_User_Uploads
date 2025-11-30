@@ -3,6 +3,7 @@ name: PR Depot Process Optimized API-Only
 on:
   schedule:
     - cron: '*/5 * * * *'  # Her 5 dakikada bir çalışacak
+  workflow_dispatch:
 
 permissions:
   contents: write
