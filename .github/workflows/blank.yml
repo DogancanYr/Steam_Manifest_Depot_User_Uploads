@@ -1,19 +1,19 @@
-name: Auto Merge All PRs
+#name: Auto Merge All PRs
 
-on:
-  schedule:
-    - cron: '*/1 * * * *'
-  workflow_dispatch:
+#on:
+#  schedule:
+#    - cron: '*/1 * * * *'
+#  workflow_dispatch:
 
-jobs:
-  auto-merge:
-    runs-on: ubuntu-latest
+#jobs:
+#  auto-merge:
+#    runs-on: ubuntu-latest
 
-    steps:
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
+#    steps:
+#      - name: Install jq
+#        run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Merge all PRs in ascending order with retries
+#      - name: Merge all PRs in ascending order with retries
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
           REPO: ${{ github.repository }}
