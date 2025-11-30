@@ -87,20 +87,21 @@ jobs:
                   $page++
               } while ($files.Count -eq 100)
           }
-   - name: Download Depot Dumper Tool
-     shell: pwsh
-     run: |
-       $toolDir = "DepotDumper"
-       if (-not (Test-Path $toolDir)) { 
-           Write-Host "🛠️ DepotDumper klasörü indiriliyor..."
-           git clone https://github.com/DogancanYr/Steam_Manifest_Depot.git $toolDir
-       } else { 
-           Write-Host "✅ DepotDumper klasörü zaten var, güncelleniyor..."
-           Push-Location $toolDir
-           git pull
-           Pop-Location
-       }
-
+          
+      # --- 3) Depot Dumper Tool ---
+      - name: Download Depot Dumper Tool
+        shell: pwsh
+        run: |
+          $toolDir = "DepotDumper"
+          if (-not (Test-Path $toolDir)) { 
+              Write-Host "🛠️ DepotDumper klasörü indiriliyor..."
+              git clone https://github.com/DogancanYr/Steam_Manifest_Depot.git $toolDir
+          } else { 
+              Write-Host "✅ DepotDumper klasörü zaten var, güncelleniyor..."
+              Push-Location $toolDir
+              git pull
+              Pop-Location
+          }
 
       # --- 4) Depot İşlemi ---
       - name: Run Depot Dumper and Collect Files
