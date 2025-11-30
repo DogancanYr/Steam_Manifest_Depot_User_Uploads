@@ -15,31 +15,35 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # --- 1) PR Listesini API ile Al ---
-      - name: Fetch First Open PR via API
-        shell: pwsh
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-          REPO_NAME: ${{ github.repository }}
-        run: |
-          Write-Host "📋 İlk açık PR çekiliyor..."
+      # --- 1) Tüm Açık PR'leri Al ve En Küçüğünü Seç ---
+      Write-Host "📋 Tüm açık PR'ler çekiliyor..."
       
-          $headers = @{
-            Authorization = "token $env:PAT_TOKEN"
-            Accept        = "application/vnd.github.v3+json"
-          }
+      $headers = @{
+          Authorization = "token $env:PAT_TOKEN"
+          Accept        = "application/vnd.github.v3+json"
+      }
 
-          $url = "https://api.github.com/repos/$env:REPO_NAME/pulls?state=open&per_page=1"
-          $prs = Invoke-RestMethod -Headers $headers -Uri $url -Method Get
-      
-          if (-not $prs) {
-              Write-Host "⚠️ Açık PR bulunamadı. İşlem atlanıyor."
-              exit 0
-          }
+      $url = "https://api.github.com/repos/$env:REPO_NAME/pulls?state=open&per_page=100"
+      $prs = Invoke-RestMethod -Headers $headers -Uri $url -Method Get
 
-          # Sadece ilk PR’yi kaydet
-          $firstPR = $prs[-1]
-          "$($firstPR.number) $($firstPR.head.repo.full_name)" | Set-Content -Path "pr_list.txt"
+      if (-not $prs) {
+          Write-Host "⚠️ Açık PR bulunamadı. İşlem atlanıyor."
+          exit 0
+      }
+
+      # PR numaralarını al
+      $prNumbers = $prs | ForEach-Object { $_.number }
+
+      # En küçük PR numarasını bul
+      $minPRNumber = ($prNumbers | Measure-Object -Minimum).Minimum
+
+      # En küçük PR'nin repository bilgisini al
+      $minPR = $prs | Where-Object { $_.number -eq $minPRNumber }
+
+      "$($minPR.number) $($minPR.head.repo.full_name)" | Set-Content -Path "pr_list.txt"
+
+      Write-Host "✅ En küçük PR numarası kaydedildi: $($minPR.number)"
+
 
 
       # --- 2) PR Dosyalarını API ile İndir ---
