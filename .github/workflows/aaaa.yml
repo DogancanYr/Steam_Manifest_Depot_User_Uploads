@@ -1,159 +1,108 @@
-name: PR Depot Process Optimized - Scheduled
+name: PR Depot Process via API
 
-# İş akışının tetiklenme koşulları
 on:
-  # Zamanlayıcı ile tetikle: Her dakika çalışır (*/1 * * * *)
   schedule:
     - cron: '*/1 * * * *'
-  # Manuel olarak tetikleme (isteğe bağlı)
   workflow_dispatch:
 
-# İşlem için gerekli izinler
 permissions:
-  contents: write    # Repository'ye commit/push yapabilmek için
-  pull-requests: write # Bu iş akışında kullanılmayacak olsa da, PR izinleri korunmuştur.
+  contents: write
+  pull-requests: write
 
 jobs:
-  process:
-    name: Process Steam Depot Files
+  process-pr:
+    name: Process PR Depot Files
     runs-on: windows-latest
-    
-    # Zamanlanmış çalıştırmalar için koşul gerekmez
 
     steps:
-      # --- 1) Repo'yu checkout et ---
-      # Not: Zamanlanmış çalıştırmada hangi branch'in checkout edileceği önemlidir.
-      # Varsayılan olarak main/master branch checkout edilir.
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0 # Tüm geçmişi getir
-          
-      # --- 2) PR Dosyalarını İndir (Bu Adım Artık İlgisizdir) ---
-      # Bu adım Pull Request (PR) dosyalarını indirdiği için,
-      # zamanlanmış çalıştırmada bir PR numarası ve dosya listesi olmadığından 
-      # tamamen kaldırılmalı veya değiştirilmelidir.
-      # Ancak, orijinal adım korunmuş ve `if: false` ile etkisiz hale getirilmiştir 
-      # ki mantığı bozulmasın, sadece çalışmasın.
-      - name: Fetch PR Files (Changes Only) - SKIPPED
-        if: false # PR ile çalışmayacağı için bu adımı atla
-        run: echo "PR çalıştırması olmadığı için atlandı."
+      - name: Fetch PR Files via GitHub API
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_NAME: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          Write-Host "📥 PR #$env:PR_NUMBER dosyaları indiriliyor..."
+          $headers = @{ Authorization = "token $env:GITHUB_TOKEN"; Accept = "application/vnd.github.v3+json" }
+          $url = "https://api.github.com/repos/$env:REPO_NAME/pulls/$env:PR_NUMBER/files?per_page=100"
+          $files = Invoke-RestMethod -Headers $headers -Uri $url -Method Get
+          if (-not $files) { Write-Warning "PR dosyası yok, işlem atlanıyor."; exit 0 }
 
-      # --- 3) Depot Tools İndir ---
+          $tempDir = New-Item -ItemType Directory -Path "process_tmp" -Force
+          foreach ($file in $files) {
+            if ($file.status -eq "removed") { continue }
+            $fullPath = Join-Path $tempDir $file.filename
+            $dir = Split-Path -Parent $fullPath
+            if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+            try {
+              Invoke-WebRequest -Uri $file.raw_url -OutFile $fullPath -ErrorAction Stop
+              Write-Host "⬇️ İndirildi: $($file.filename)"
+            } catch { Write-Error "❌ $($file.filename) indirilemedi: $_" }
+          }
+          Write-Host "✅ PR dosyaları indirildi."
+
       - name: Download Depot Dumper Tool
         shell: pwsh
         run: |
           $toolDir = New-Item -ItemType Directory -Path "DepotDumper" -Force
           $toolUrl = "https://raw.githubusercontent.com/DogancanYr/Steam_Manifest_Depot/main/DepotDumper/Depot.exe"
-          
-          Write-Host "🛠️ Depot.exe indiriliyor..."
           Invoke-WebRequest -Uri $toolUrl -OutFile (Join-Path $toolDir "Depot.exe") -ErrorAction Stop
 
-          Write-Host "✅ Depot.exe indirildi."
-
-      # --- 4) Depot İşlemi (Secrets Kullanarak) ---
-      # NOT: Bu adımın PR ile gelmeyen dosyaları nasıl işleyeceği,
-      # yani hangi dosyaların işleneceği (örn: tüm *_pkgs.txt dosyaları mı?)
-      # iş akışı mantığına göre belirlenmelidir.
-      # Orijinal iş akışınızda dosya indirme adımı PR dosyalarını indiriyordu.
-      # Bu örnekte, indirme adımı atlandığı için `process_tmp` klasörü olmayacaktır.
-      # Bu nedenle, 4. adımın başlangıcındaki dosya arama yolu `.` (mevcut repo) olarak değiştirilmiştir.
       - name: Run Depot Dumper and Collect Files
-        id: depot_run
         shell: pwsh
         env:
-          DEPOT_USER: ${{ secrets.DEPOT_USERNAME }}  
+          DEPOT_USER: ${{ secrets.DEPOT_USERNAME }}
           DEPOT_PASS: ${{ secrets.DEPOT_PASSWORD }}
         run: |
           $ErrorActionPreference = 'Stop'
-          
-          # Depo içindeki dosyaları tara (process_tmp yerine mevcut dizin)
-          $inputDir = "." 
+          $inputDir = "process_tmp"
           $outputDir = New-Item -ItemType Directory -Path "collected" -Force
           $depotExe = Join-Path $PWD "DepotDumper\Depot.exe"
 
-          # *_pkgs.txt dosyalarını bul
-          # NOT: Bu, depodaki TÜM *_pkgs.txt dosyalarını işleyecektir.
+          if (-not (Test-Path $inputDir)) { Write-Host "İşlenecek dosya yok, atlanıyor."; exit 0 }
+
           $pkgFiles = Get-ChildItem -Path $inputDir -Filter '*_pkgs.txt' -Recurse -File
-
-          if ($pkgFiles.Count -eq 0) {
-              Write-Warning "⚠️ İşlenecek *_pkgs.txt dosyası bulunamadı. İşlem başarıyla atlanıyor."
-              exit 0
-          }
-
-          Write-Host "✔️ *_pkgs.txt dosyaları bulundu: $($pkgFiles.Count)"
+          if ($pkgFiles.Count -eq 0) { Write-Host "İşlenecek *_pkgs.txt yok."; exit 0 }
 
           foreach ($pkg in $pkgFiles) {
-              
-              $pkgPath = $pkg.FullName
-              $pkgDirectory = Split-Path -Parent $pkgPath
-              $prefix = $pkg.BaseName -replace '_pkgs$', ''
-              $keyFile = Join-Path $pkgDirectory "${prefix}_keys.txt"
+            $pkgPath = $pkg.FullName
+            $pkgDirectory = Split-Path -Parent $pkgPath
+            $prefix = $pkg.BaseName -replace '_pkgs$', ''
+            $keyFile = Join-Path $pkgDirectory "${prefix}_keys.txt"
+            if (-not (Test-Path $keyFile)) { Write-Warning "$($pkg.Name) için anahtar dosyası yok"; continue }
 
-              if (-not (Test-Path $keyFile)) {
-                  Write-Warning "⚠️ $($pkg.Name) için anahtar dosyası bulunamadı. Atlanıyor."
-                  continue
-              }
+            $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' }
+            $firstLine = $content.Trim().Split("`n")[0]
+            $parts = $firstLine -split ';'
+            if ($parts.Count -lt 2) { Write-Warning "$($pkg.Name) format hatası"; continue }
 
-              Write-Host "🚀 İşleniyor: $($pkg.Name)"
+            $appId = $parts[0].Trim()
+            $token = $parts[1].Trim()
 
-              $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' }  
-              $firstLine = $content.Trim().Split("`n")[0]
-              $parts = $firstLine -split ';'
+            Push-Location $outputDir
+            try {
+              & $depotExe -username $env:DEPOT_USER -password $env:DEPOT_PASS -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
+            }
+            finally { Pop-Location }
+          }
 
-              if ($parts.Count -lt 2) {
-                  Write-Error "❌ Format hatası: $($pkg.Name). (app;token formatında olmalı)"
-                  continue
-              }
-
-              $appId = $parts[0].Trim()
-              $token = $parts[1].Trim()
-              Write-Host "    AppID: $appId"
-
-              # --- TRY / CATCH / FINALLY ---
-              Push-Location $outputDir
-              try {
-                  # Kullanıcı adı ve şifre Secret'ları burada kullanılır
-                  & $depotExe -username Bt5Pd3Zm9Sz4 -password Yk2Ho8Wl5Im2 -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
-                  Write-Host "✅ $($pkg.Name) işlemi tamamlandı."
-              }
-              catch {
-                  Write-Error "❌ Depot Dumper hatası: $_"
-              }
-              finally {
-                  Pop-Location
-              }
-          } # foreach kapanışı
-
-          # Hata ayıklama için son klasör içeriğini göster
-          Write-Host "--- collected Klasör İçeriği ---"
-          Get-ChildItem -Path $outputDir -Recurse | Select-Object FullName
-          Write-Host "--------------------------------"
-
-
-      # --- 5) Sonuçları Commit ve Push Et ---
       - name: Commit and Push Results
         shell: bash
         run: |
-          git config user.name "DogancanYr"
-          git config user.email "DogancanYr@users.noreply.github.com"
-
-          # Sadece 'collected' klasöründeki değişiklikleri takip et
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git add collected/
-          
-          # Commit edilecek bir değişiklik var mı kontrol et
-          if git diff --cached --quiet; then
-            echo "ℹ️ collected/ klasöründe yeni değişiklik yok, push yapılmayacak."
-          else
-            echo "📦 Yeni Depot dosyaları commitleniyor..."
-            # Commit mesajı artık PR numarası içermeyecek
-            git commit -m "Auto-process: Added scheduled depot files (${{ github.sha }})"
-            
-            # Geçerli branch'e push et (Zamanlanmış çalıştırmada 'HEAD' mevcut branch'i temsil eder)
-            # NOT: Bu push işlemi için kullanılan Secret'ın (ACTIONS_PAT) write izni olmalıdır.
-            git push https://x-access-token:${{ secrets.ACTIONS_PAT }}@github.com/${{ github.repository }} HEAD
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-process PR #${{ github.event.pull_request.number }}"
+            git push origin HEAD:${{ github.head_ref }}
           fi
 
-      # --- 6) PR'ı Kapat ve Yorum Ekle (Kaldırıldı) ---
-      # PR ile çalışmadığı için bu adım tamamen kaldırılmıştır.
+      - name: Close Pull Request
+        if: success()
+        uses: peter-evans/close-pull@v3
+        with:
+          pull-request-number: ${{ github.event.pull_request.number }}
+          comment: "✅ İşlem tamamlandı!"
+          delete-branch: true
