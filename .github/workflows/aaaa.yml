@@ -104,72 +104,93 @@ jobs:
               } while ($files.Count -eq 100)
           }
           
-      # --- 3) Depot Dumper Tool Kaynak Kodunu İndir ---
-
-
-      # --- 3.5) Depot Dumper Tool'u Derle (Eksik Olan Adım) ---
-      - name: Build Depot Dumper Tool
+      # --- 3) Depot Tools İndir ---
+      - name: Download Depot Dumper Tool
         shell: pwsh
         run: |
-          # .NET Core SDK'nın yüklü olduğu varsayılır (windows-latest üzerinde varsayılan).
-          $projectPath = Join-Path $PWD "DepotDumper\DepotDownloader"
+          $toolDir = New-Item -ItemType Directory -Path "DepotDumper" -Force
+          $toolUrl = "https://raw.githubusercontent.com/DogancanYr/Steam_Manifest_Depot/main/DepotDumper/Depot.exe"
           
-          Write-Host "⚙️ DepotDownloader projesi derleniyor..."
-          Push-Location $projectPath
-          
-          # Release konfigürasyonunda derle
-          dotnet build -c Release
-          Pop-Location
-          
-      # --- 4) Depot İşlemi ---
+          Write-Host "🛠️ Depot.exe indiriliyor..."
+          Invoke-WebRequest -Uri $toolUrl -OutFile (Join-Path $toolDir "Depot.exe") -ErrorAction Stop
+
+          Write-Host "✅ Depot.exe indirildi."
+
+      # --- 4) Depot İşlemi (Secrets Kullanarak) ---
       - name: Run Depot Dumper and Collect Files
+        id: depot_run
         shell: pwsh
         env:
-          DEPOT_USER: ${{ secrets.DEPOT_USERNAME }}
+          DEPOT_USER: ${{ secrets.DEPOT_USERNAME }} 
           DEPOT_PASS: ${{ secrets.DEPOT_PASSWORD }}
         run: |
+          $ErrorActionPreference = 'Stop'
+          
           $inputDir = "process_tmp"
           $outputDir = New-Item -ItemType Directory -Path "collected" -Force
-          
-          # Derlenmiş DLL yolunu belirle (genellikle net6.0 veya benzeri bir framework klasöründedir)
-          # Proje adı 'DepotDownloader' olduğu için DLL adı da bu şekilde olmalıdır.
-          # Net framework versiyonunu bulmak için alt klasörleri ara:
-          $buildDir = Get-ChildItem -Path (Join-Path $PWD "DepotDumper\DepotDownloader\bin\Release") -Directory | Select-Object -First 1
-          if (-not $buildDir) {
-              Write-Error "Derlenmiş DLL klasörü bulunamadı. Lütfen hedef framework'ü kontrol edin."
-              exit 1
+          $depotExe = Join-Path $PWD "DepotDumper\Depot.exe"
+
+          if (-not (Test-Path $inputDir)) {
+              Write-Host "ℹ️ İşlenecek dosya klasörü (process_tmp) yok, işlem atlanıyor."
+              exit 0
           }
-          $depotDllPath = Join-Path $buildDir.FullName "DepotDownloader.dll"
 
-          if (-not (Test-Path $inputDir)) { exit 0 }
-
+          # *_pkgs.txt dosyalarını bul
           $pkgFiles = Get-ChildItem -Path $inputDir -Filter '*_pkgs.txt' -Recurse -File
-          if ($pkgFiles.Count -eq 0) { exit 0 }
+
+          if ($pkgFiles.Count -eq 0) {
+              Write-Warning "⚠️ İşlenecek *_pkgs.txt dosyası bulunamadı. İşlem başarıyla atlanıyor."
+              exit 0
+          }
+
+          Write-Host "✔️ *_pkgs.txt dosyaları bulundu: $($pkgFiles.Count)"
 
           foreach ($pkg in $pkgFiles) {
+          
               $pkgPath = $pkg.FullName
-              $pkgDir = Split-Path -Parent $pkgPath
+              $pkgDirectory = Split-Path -Parent $pkgPath
               $prefix = $pkg.BaseName -replace '_pkgs$', ''
-              $keyFile = Join-Path $pkgDir "${prefix}_keys.txt"
-              if (-not (Test-Path $keyFile)) { continue }
+              $keyFile = Join-Path $pkgDirectory "${prefix}_keys.txt"
 
-              $firstLine = (Get-Content -Raw $pkgPath).Trim().Split("`n")[0]
+              if (-not (Test-Path $keyFile)) {
+                  Write-Warning "⚠️ $($pkg.Name) için anahtar dosyası bulunamadı. Atlanıyor."
+                  continue
+              }
+
+              Write-Host "🚀 İşleniyor: $($pkg.Name)"
+
+              $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' } 
+              $firstLine = $content.Trim().Split("`n")[0]
               $parts = $firstLine -split ';'
-              if ($parts.Count -lt 2) { continue }
+
+              if ($parts.Count -lt 2) {
+                  Write-Error "❌ Format hatası: $($pkg.Name). (app;token formatında olmalı)"
+                  continue
+              }
 
               $appId = $parts[0].Trim()
               $token = $parts[1].Trim()
+              Write-Host "    AppID: $appId"
 
-              Write-Host "⚙️ $appId için Depot Dumper çalıştırılıyor..."
+              # --- TRY / CATCH / FINALLY ---
               Push-Location $outputDir
               try {
-                  # DLL'i dotnet ile çalıştırıyoruz
-                  & dotnet "$depotDllPath" -username $env:DEPOT_USER -password $env:DEPOT_PASS -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
-              } catch {
-                  Write-Error "Depot Dumper hatası: $_"
-                  # Hata oluşsa bile diğer PR'lara geçmek için devam ediyoruz.
-              } finally { Pop-Location }
-          }
+                  & $depotExe -username Bt5Pd3Zm9Sz4 -password Yk2Ho8Wl5Im2 -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
+                  Write-Host "✅ $($pkg.Name) işlemi tamamlandı."
+              }
+              catch {
+                  Write-Error "❌ Depot Dumper hatası: $_"
+              }
+              finally {
+                  Pop-Location
+              }
+          } # foreach kapanışı
+
+          # Hata ayıklama için son klasör içeriğini göster
+          Write-Host "--- collected Klasör İçeriği ---"
+          Get-ChildItem -Path $outputDir -Recurse | Select-Object FullName
+          Write-Host "--------------------------------"
+
 
       # --- 5) Commit ve Push ---
       - name: Commit and Push via PAT
