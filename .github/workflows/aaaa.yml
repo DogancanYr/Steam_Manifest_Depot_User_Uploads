@@ -91,13 +91,16 @@ jobs:
       - name: Download Depot Dumper Tool
         shell: pwsh
         run: |
-          $toolDir = New-Item -ItemType Directory -Path "DepotDumper" -Force
+          $toolDir = "DepotDumper"
+          if (-not (Test-Path $toolDir)) { New-Item -ItemType Directory -Path $toolDir -Force | Out-Null }
+
           $toolUrl = "https://raw.githubusercontent.com/DogancanYr/Steam_Manifest_Depot/main/DepotDumper/Depot.exe"
+          $toolPath = Join-Path $toolDir "Depot.exe"
           
           Write-Host "🛠️ Depot.exe indiriliyor..."
-          Invoke-WebRequest -Uri $toolUrl -OutFile (Join-Path $toolDir "Depot.exe") -ErrorAction Stop
+          Invoke-WebRequest -Uri $toolUrl -OutFile $toolPath -UseBasicParsing -ErrorAction Stop
+          Write-Host "✅ Depot.exe indirildi: $toolPath"
 
-          Write-Host "✅ Depot.exe indirildi."
       # --- 4) Depot İşlemi ---
       - name: Run Depot Dumper and Collect Files
         shell: pwsh
