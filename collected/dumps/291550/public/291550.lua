@@ -9,6 +9,8 @@ setManifestid(291552, "996392010605750422", 0)
 
 
 
+
+
 addappid(297630) -- Brawlhalla - Founders Pack
 addappid(298640) -- Brawlhalla - Founders and Friends Pack
 addappid(298641) -- Brawlhalla - Collectors Pack
