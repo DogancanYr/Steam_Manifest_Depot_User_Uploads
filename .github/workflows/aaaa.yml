@@ -152,27 +152,17 @@ jobs:
           $pkgFiles | ForEach-Object { Write-Host "   - $($_.FullName)" }
 
           foreach ($pkg in $pkgFiles) {
-    
               $pkgPath = $pkg.FullName
               $pkgDirectory = Split-Path -Parent $pkgPath
               $prefix = $pkg.BaseName -replace '_pkgs$', ''
               $keyFile = Join-Path $pkgDirectory "${prefix}_keys.txt"
-
-              Write-Host "---------------------------------------------"
-              Write-Host "🚀 İşlem başlatılıyor: $($pkg.Name)"
-              Write-Host "📁 Paket klasörü: $pkgDirectory"
-              Write-Host "🔑 Anahtar dosyası: $keyFile"
 
               if (-not (Test-Path $keyFile)) {
                   Write-Warning "⚠️ $($pkg.Name) için anahtar dosyası bulunamadı. Atlanıyor."
                   continue
               }
 
-              # Paket dosyası içeriği
               $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' }
-              Write-Host "📄 Paket içeriği (ilk 3 satır):"
-              $content.Split("`n")[0..([Math]::Min(2, $content.Split("`n").Count - 1))] | ForEach-Object { Write-Host "   $_" }
-
               $firstLine = $content.Trim().Split("`n")[0]
               $parts = $firstLine -split ';'
 
@@ -183,48 +173,32 @@ jobs:
 
               $appId = $parts[0].Trim()
               $token = $parts[1].Trim()
-              Write-Host "    AppID: $appId"
-              Write-Host "    Token: $token"
 
-              # --- FOREACH DÖNGÜSÜ ÖRNEĞİ ---
-              foreach ($pkg in $packages) {
+              # Depot.exe çalıştır
+              Push-Location $outputDir
+              try {
+                  $arguments = @(
+                      "-username", $env:DEPOT_USER
+                      "-password", $env:DEPOT_PASS
+                      "-debug"
+                      "-app", $appId
+                      "-packagetoken", $token
+                      "-depotkeys", $keyFile
+                  )
+                  $safeArguments = $arguments -replace [regex]::Escape($env:DEPOT_PASS), '***'
+                  Write-Host "💻 Çalıştırılan komut: $depotExe $($safeArguments -join ' ')"
 
-                  # Çıkış dizinine geç
-                  Push-Location $outputDir
-                  try {
-                      # Depot.exe parametrelerini dizi olarak hazırla
-                      $arguments = @(
-                          "-username", $env:DEPOT_USER
-                          "-password", $env:DEPOT_PASS
-                          "-debug"
-                          "-app", $appId
-                          "-packagetoken", $token
-                          "-depotkeys", $keyFile
-                      )
+                  & $depotExe @arguments
+                  Write-Host "✅ $($pkg.Name) işlemi tamamlandı."
+              }
+              catch {
+                  Write-Error "❌ Depot Dumper hatası: $_"
+              }
+              finally {
+                  Pop-Location
+              }
+          } # <-- dış foreach burada kapanıyor
 
-                      # Komut satırını logla, şifreyi gizleyerek
-                      $safeArguments = $arguments -replace [regex]::Escape($env:DEPOT_PASS), '***'
-                      Write-Host "💻 Çalıştırılan komut: $depotExe $($safeArguments -join ' ')"
-
-                      # Depot.exe çalıştır
-                      & $depotExe @arguments
-
-                      Write-Host "✅ $($pkg.Name) işlemi tamamlandı."
-                  }
-                  catch {
-                      Write-Error "❌ Depot Dumper hatası: $_"
-                      Write-Host "🔍 Hata detayları:"
-                      if ($_.Exception) {
-                          Write-Host $_.Exception.Message
-                          Write-Host $_.Exception.StackTrace
-                      } else {
-                          Write-Host $_
-                      }
-                  }
-                  finally {
-                      Pop-Location
-                  }
-              } # foreach kapanışı
 
 
           # Hata ayıklama için son klasör içeriğini detaylı göster
