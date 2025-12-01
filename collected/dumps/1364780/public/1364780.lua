@@ -77,6 +77,8 @@ setManifestid(1364781, "4570939030172837518", 0)
 
 
 
+
+
 addappid(2224460) -- Street Fighter™ 6 - Year 1 Character Pass
 addappid(2224461) -- Street Fighter™ 6 - Year 1 Ultimate Pass
 addappid(2224462) -- Street Fighter™ 6 - Outfit 1 Color 10 for Chun-Li, Jamie, Manon, Dee Jay, Juri, Ken
