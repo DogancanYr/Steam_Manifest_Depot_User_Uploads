@@ -121,14 +121,18 @@ jobs:
         id: depot_run
         shell: pwsh
         env:
-          DEPOT_USER: ${{ secrets.DEPOT_USERNAME }} 
+          DEPOT_USER: ${{ secrets.DEPOT_USERNAME }}
           DEPOT_PASS: ${{ secrets.DEPOT_PASSWORD }}
         run: |
           $ErrorActionPreference = 'Stop'
-          
+    
           $inputDir = "process_tmp"
           $outputDir = New-Item -ItemType Directory -Path "collected" -Force
           $depotExe = Join-Path $PWD "DepotDumper\Depot.exe"
+
+          Write-Host "ℹ️ Çalışma dizini: $PWD"
+          Write-Host "ℹ️ Input klasörü: $inputDir"
+          Write-Host "ℹ️ Output klasörü: $outputDir"
 
           if (-not (Test-Path $inputDir)) {
               Write-Host "ℹ️ İşlenecek dosya klasörü (process_tmp) yok, işlem atlanıyor."
@@ -144,22 +148,31 @@ jobs:
           }
 
           Write-Host "✔️ *_pkgs.txt dosyaları bulundu: $($pkgFiles.Count)"
+          Write-Host "Dosyalar:"
+          $pkgFiles | ForEach-Object { Write-Host "   - $($_.FullName)" }
 
           foreach ($pkg in $pkgFiles) {
-          
+    
               $pkgPath = $pkg.FullName
               $pkgDirectory = Split-Path -Parent $pkgPath
               $prefix = $pkg.BaseName -replace '_pkgs$', ''
               $keyFile = Join-Path $pkgDirectory "${prefix}_keys.txt"
+
+              Write-Host "---------------------------------------------"
+              Write-Host "🚀 İşlem başlatılıyor: $($pkg.Name)"
+              Write-Host "📁 Paket klasörü: $pkgDirectory"
+              Write-Host "🔑 Anahtar dosyası: $keyFile"
 
               if (-not (Test-Path $keyFile)) {
                   Write-Warning "⚠️ $($pkg.Name) için anahtar dosyası bulunamadı. Atlanıyor."
                   continue
               }
 
-              Write-Host "🚀 İşleniyor: $($pkg.Name)"
+              # Paket dosyası içeriği
+              $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' }
+              Write-Host "📄 Paket içeriği (ilk 3 satır):"
+              $content.Split("`n")[0..([Math]::Min(2, $content.Split("`n").Count - 1))] | ForEach-Object { Write-Host "   $_" }
 
-              $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' } 
               $firstLine = $content.Trim().Split("`n")[0]
               $parts = $firstLine -split ';'
 
@@ -171,25 +184,31 @@ jobs:
               $appId = $parts[0].Trim()
               $token = $parts[1].Trim()
               Write-Host "    AppID: $appId"
+              Write-Host "    Token: $token"
 
               # --- TRY / CATCH / FINALLY ---
               Push-Location $outputDir
               try {
-                  & $depotExe -username lvwqf57261 -password dkba28578Z -debug -app $appId -packagetoken $token -depotkeys $keyFile
+                  $cmd = "& `"$depotExe`" -username $env:DEPOT_USER -password $env:DEPOT_PASS -debug -app $appId -packagetoken $token -depotkeys `"$keyFile`""
+                 Write-Host "💻 Çalıştırılan komut: $cmd"
+                  Invoke-Expression $cmd
                   Write-Host "✅ $($pkg.Name) işlemi tamamlandı."
               }
               catch {
                   Write-Error "❌ Depot Dumper hatası: $_"
+                  Write-Host "🔍 Hata detayları:"
+                  Write-Host $_.Exception.Message
+                  Write-Host $_.Exception.StackTrace
               }
               finally {
                   Pop-Location
               }
           } # foreach kapanışı
 
-          # Hata ayıklama için son klasör içeriğini göster
-          Write-Host "--- collected Klasör İçeriği ---"
-          Get-ChildItem -Path $outputDir -Recurse | Select-Object FullName
-          Write-Host "--------------------------------"
+          # Hata ayıklama için son klasör içeriğini detaylı göster
+          Write-Host "--- collected Klasör İçeriği (Detaylı) ---"
+          Get-ChildItem -Path $outputDir -Recurse | Format-List FullName,Length,LastWriteTime
+          Write-Host "------------------------------------------"
 
 
       # --- 5) Commit ve Push ---
