@@ -152,6 +152,7 @@ jobs:
           $pkgFiles | ForEach-Object { Write-Host "   - $($_.FullName)" }
 
           foreach ($pkg in $pkgFiles) {
+          
               $pkgPath = $pkg.FullName
               $pkgDirectory = Split-Path -Parent $pkgPath
               $prefix = $pkg.BaseName -replace '_pkgs$', ''
@@ -162,7 +163,9 @@ jobs:
                   continue
               }
 
-              $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' }
+              Write-Host "🚀 İşleniyor: $($pkg.Name)"
+
+              $content = Get-Content -Raw $pkgPath | ForEach-Object { $_ -replace '^\uFEFF', '' } 
               $firstLine = $content.Trim().Split("`n")[0]
               $parts = $firstLine -split ';'
 
@@ -173,22 +176,12 @@ jobs:
 
               $appId = $parts[0].Trim()
               $token = $parts[1].Trim()
+              Write-Host "    AppID: $appId"
 
-              # Depot.exe çalıştır
+              # --- TRY / CATCH / FINALLY ---
               Push-Location $outputDir
               try {
-                  $arguments = @(
-                      "-username", $env:DEPOT_USER
-                      "-password", $env:DEPOT_PASS
-                      "-debug"
-                      "-app", $appId
-                      "-packagetoken", $token
-                      "-depotkeys", $keyFile
-                  )
-                  $safeArguments = $arguments -replace [regex]::Escape($env:DEPOT_PASS), '***'
-                  Write-Host "💻 Çalıştırılan komut: $depotExe $($safeArguments -join ' ')"
-
-                  & $depotExe @arguments
+                  & $depotExe -username Bt5Pd3Zm9Sz4 -password Yk2Ho8Wl5Im2 -debug -app $appId -packagetoken $token -depotkeys $keyFile -Verbose
                   Write-Host "✅ $($pkg.Name) işlemi tamamlandı."
               }
               catch {
@@ -197,8 +190,7 @@ jobs:
               finally {
                   Pop-Location
               }
-          } # <-- dış foreach burada kapanıyor
-
+          } # foreach kapanışı
 
 
           # Hata ayıklama için son klasör içeriğini detaylı göster
