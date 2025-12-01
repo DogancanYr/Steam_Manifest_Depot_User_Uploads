@@ -1,0 +1,527 @@
+Log initialized at 2025-12-01 13:42:28 with level Info
+[2025-12-01 13:42:28] [INFO] Statistics tracking initialized
+[2025-12-01 13:42:28] [INFO] No specific App IDs provided. Processing all apps from licenses.
+[2025-12-01 13:42:29] [INFO] Initiating connection to Steam...
+[2025-12-01 13:42:30] [INFO] Successfully connected to Steam.
+[2025-12-01 13:42:31] [INFO] Attempting login for user: lvwqf57261...
+[2025-12-01 13:42:32] [INFO] LogOnCallback received. Result: OK
+[2025-12-01 13:42:32] [INFO] Successfully logged on to Steam. Account: [U:1:1684846317], CellID: 76
+[2025-12-01 13:42:32] [INFO] Using suggested CellID: 76
+[2025-12-01 13:42:32] [INFO] Steam3 initialized and credentials obtained successfully.
+[2025-12-01 13:42:32] [INFO] Waiting for license list callback...
+[2025-12-01 13:42:32] [INFO] LicenseListCallback received. Result: OK
+[2025-12-01 13:42:32] [INFO] Received 11 licenses.
+[2025-12-01 13:42:32] [INFO] Processed 11 package tokens from license list.
+[2025-12-01 13:42:32] [INFO] License list ready. Found 11 licenses.
+[2025-12-01 13:42:32] [INFO] Found 14 apps in licenses to process
+[2025-12-01 13:42:33] [INFO] Received AppInfo for 2484250
+[2025-12-01 13:42:33] [INFO] Processing app 2484250: ASTRA: Knights of Veda
+[2025-12-01 13:42:33] [INFO] Loaded DLC relationship cache from dumps\.DepotDumper\dlc_relationships.json with 24 parent apps and 24 total entries
+[2025-12-01 13:42:33] [INFO] Dumping depot 2484251 for app 2484250
+[2025-12-01 13:42:33] [INFO] Requesting depot key for depot 2484251 using app context 2484250
+[2025-12-01 13:42:33] [INFO] Requesting depot key for 2484251 using app context 2484250
+[2025-12-01 13:42:33] [INFO] Depot key result for 2484251 (app context 2484250): OK
+[2025-12-01 13:42:33] [INFO] Starting to process depot 2484251 for app context 2484250
+[2025-12-01 13:42:33] [INFO] Processing 1 manifests for depot 2484251 with up to 4 at a time
+[2025-12-01 13:42:33] [INFO] [TrackDepotStart] Started tracking depot 2484251 for app 2484250 with 1 manifests
+[2025-12-01 13:42:33] [INFO] Manifest 7067114861795890254 exists for depot 2484251 branch 'public', skipping download.
+[2025-12-01 13:42:33] [WARNING] Manifest 7067114861795890254: Could not load existing manifest dumps\2484250\public\2484251_7067114861795890254.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:33] [INFO] Completed processing all manifests for depot 2484251
+[2025-12-01 13:42:33] [INFO] [TrackDepotCompletion] Depot 2484251 processed successfully
+[2025-12-01 13:42:34] [INFO] No DLCs found or fetched for app 2484250, skipping final Lua append step.
+[2025-12-01 13:42:34] [INFO] Creating zip archives for 1 branches of app 2484250 ('ASTRA: Knights of Veda')
+[2025-12-01 13:42:34] [INFO] Found app name from info file (dumps\2484250\2484250.info): ASTRA: Knights of Veda
+[2025-12-01 13:42:34] [INFO] Using app name from SteamKit: ASTRA: Knights of Veda
+[2025-12-01 13:42:34] [INFO] No DLCs found or fetched for app 2484250, skipping DLC append step.
+[2025-12-01 13:42:34] [INFO] Zip archive already exists and no new manifests downloaded for branch 'public', skipping: dumps\2484250\2484250.public.2025-12-01_06-15-06.ASTRA_ Knights of Veda\2484250.zip
+[2025-12-01 13:42:34] [INFO] Cleaning up empty directories...
+[2025-12-01 13:42:34] [INFO] [TrackAppCompletion] App 2484250 (ASTRA: Knights of Veda) processed successfully
+[2025-12-01 13:42:34] [INFO] Completely reset all branch state after app 2484250 processing completed
+[2025-12-01 13:42:35] [INFO] Received AppInfo for 705210
+[2025-12-01 13:42:35] [INFO] Processing app 705210: Cube Racer
+[2025-12-01 13:42:35] [INFO] Found 1 DLCs listed for app 705210
+[2025-12-01 13:42:36] [INFO] Received AppInfo for 898130
+[2025-12-01 13:42:36] [INFO] Adding DLC 898130 ('Cube Racer - Founders Early Support Upgrade') to list - it has NO depots
+[2025-12-01 13:42:36] [INFO] Dumping depot 705211 for app 705210
+[2025-12-01 13:42:36] [INFO] Requesting depot key for depot 705211 using app context 705210
+[2025-12-01 13:42:36] [INFO] Requesting depot key for 705211 using app context 705210
+[2025-12-01 13:42:36] [INFO] Depot key result for 705211 (app context 705210): OK
+[2025-12-01 13:42:36] [INFO] Starting to process depot 705211 for app context 705210
+[2025-12-01 13:42:36] [INFO] Processing 1 manifests for depot 705211 with up to 4 at a time
+[2025-12-01 13:42:36] [INFO] [TrackDepotStart] Started tracking depot 705211 for app 705210 with 1 manifests
+[2025-12-01 13:42:36] [INFO] Manifest 8867305674808530337 exists for depot 705211 branch 'public', skipping download.
+[2025-12-01 13:42:36] [WARNING] Manifest 8867305674808530337: Could not load existing manifest dumps\705210\public\705211_8867305674808530337.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:36] [INFO] Completed processing all manifests for depot 705211
+[2025-12-01 13:42:36] [INFO] [TrackDepotCompletion] Depot 705211 processed successfully
+[2025-12-01 13:42:37] [INFO] Dumping depot 705212 for app 705210
+[2025-12-01 13:42:37] [INFO] Requesting depot key for depot 705212 using app context 705210
+[2025-12-01 13:42:37] [INFO] Requesting depot key for 705212 using app context 705210
+[2025-12-01 13:42:37] [INFO] Depot key result for 705212 (app context 705210): OK
+[2025-12-01 13:42:37] [INFO] Starting to process depot 705212 for app context 705210
+[2025-12-01 13:42:37] [INFO] Processing 1 manifests for depot 705212 with up to 4 at a time
+[2025-12-01 13:42:37] [INFO] [TrackDepotStart] Started tracking depot 705212 for app 705210 with 1 manifests
+[2025-12-01 13:42:37] [INFO] Manifest 4673345699719803518 exists for depot 705212 branch 'public', skipping download.
+[2025-12-01 13:42:37] [WARNING] Manifest 4673345699719803518: Could not load existing manifest dumps\705210\public\705212_4673345699719803518.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:37] [INFO] Completed processing all manifests for depot 705212
+[2025-12-01 13:42:37] [INFO] [TrackDepotCompletion] Depot 705212 processed successfully
+[2025-12-01 13:42:38] [INFO] Appending 1 DLC entries to Lua files for parent app 705210 across 1 processed branches.
+[2025-12-01 13:42:38] [INFO] Successfully appended 1 DLC entries to 705210.lua in branch 'public'.
+[2025-12-01 13:42:38] [INFO] Creating zip archives for 1 branches of app 705210 ('Cube Racer')
+[2025-12-01 13:42:38] [INFO] Found 1 DLCs listed for app 705210
+[2025-12-01 13:42:38] [INFO] Adding DLC 898130 ('Cube Racer - Founders Early Support Upgrade') to list - it has NO depots
+[2025-12-01 13:42:38] [INFO] SteamKit-only DLC detection found 1 DLCs without depots for app 705210
+[2025-12-01 13:42:38] [INFO] Found app name from info file (dumps\705210\705210.info): Cube Racer
+[2025-12-01 13:42:38] [INFO] Using app name from SteamKit: Cube Racer
+[2025-12-01 13:42:38] [INFO] Appending 1 DLC entries to Lua files for app 705210 across 1 processed branches.
+[2025-12-01 13:42:38] [INFO] Successfully appended 1 DLC entries to 705210.lua in branch 'public'.
+[2025-12-01 13:42:38] [INFO] Zip archive already exists and no new manifests downloaded for branch 'public', skipping: dumps\705210\705210.public.2021-03-07_17-10-14.Cube Racer\705210.zip
+[2025-12-01 13:42:38] [INFO] Cleaning up empty directories...
+[2025-12-01 13:42:38] [INFO] [TrackAppCompletion] App 705210 (Cube Racer) processed successfully
+[2025-12-01 13:42:38] [INFO] Completely reset all branch state after app 705210 processing completed
+[2025-12-01 13:42:39] [INFO] Received AppInfo for 2709570
+[2025-12-01 13:42:39] [INFO] Processing app 2709570: Supermarket Together
+[2025-12-01 13:42:39] [INFO] Found 1 DLCs listed for app 2709570
+[2025-12-01 13:42:40] [INFO] Received AppInfo for 3146530
+[2025-12-01 13:42:40] [INFO] Adding DLC 3146530 ('Supermarket Together - The Cool Pack') to list - it has NO depots
+[2025-12-01 13:42:40] [INFO] Dumping depot 2709571 for app 2709570
+[2025-12-01 13:42:40] [INFO] Requesting depot key for depot 2709571 using app context 2709570
+[2025-12-01 13:42:40] [INFO] Requesting depot key for 2709571 using app context 2709570
+[2025-12-01 13:42:40] [INFO] Depot key result for 2709571 (app context 2709570): OK
+[2025-12-01 13:42:40] [INFO] Starting to process depot 2709571 for app context 2709570
+[2025-12-01 13:42:40] [INFO] Processing 1 manifests for depot 2709571 with up to 4 at a time
+[2025-12-01 13:42:40] [INFO] [TrackDepotStart] Started tracking depot 2709571 for app 2709570 with 1 manifests
+[2025-12-01 13:42:40] [INFO] Manifest 3043826104798890864 exists for depot 2709571 branch 'public', skipping download.
+[2025-12-01 13:42:40] [WARNING] Manifest 3043826104798890864: Could not load existing manifest dumps\2709570\public\2709571_3043826104798890864.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:40] [INFO] Completed processing all manifests for depot 2709571
+[2025-12-01 13:42:40] [INFO] [TrackDepotCompletion] Depot 2709571 processed successfully
+[2025-12-01 13:42:41] [INFO] Appending 1 DLC entries to Lua files for parent app 2709570 across 1 processed branches.
+[2025-12-01 13:42:41] [INFO] Successfully appended 1 DLC entries to 2709570.lua in branch 'public'.
+[2025-12-01 13:42:41] [INFO] Creating zip archives for 1 branches of app 2709570 ('Supermarket Together')
+[2025-12-01 13:42:41] [INFO] Found 1 DLCs listed for app 2709570
+[2025-12-01 13:42:41] [INFO] Adding DLC 3146530 ('Supermarket Together - The Cool Pack') to list - it has NO depots
+[2025-12-01 13:42:41] [INFO] SteamKit-only DLC detection found 1 DLCs without depots for app 2709570
+[2025-12-01 13:42:41] [INFO] Found app name from info file (dumps\2709570\2709570.info): Supermarket Together
+[2025-12-01 13:42:41] [INFO] Using app name from SteamKit: Supermarket Together
+[2025-12-01 13:42:41] [INFO] Appending 1 DLC entries to Lua files for app 2709570 across 1 processed branches.
+[2025-12-01 13:42:41] [INFO] Successfully appended 1 DLC entries to 2709570.lua in branch 'public'.
+[2025-12-01 13:42:41] [INFO] Zip archive already exists and no new manifests downloaded for branch 'public', skipping: dumps\2709570\2709570.public.2025-11-18_10-56-47.Supermarket Together\2709570.zip
+[2025-12-01 13:42:41] [INFO] Cleaning up empty directories...
+[2025-12-01 13:42:41] [INFO] [TrackAppCompletion] App 2709570 (Supermarket Together) processed successfully
+[2025-12-01 13:42:41] [INFO] Completely reset all branch state after app 2709570 processing completed
+[2025-12-01 13:42:42] [INFO] Received AppInfo for 2224460
+[2025-12-01 13:42:42] [INFO] Skipping DLC 2224460 because it has no depots
+[2025-12-01 13:42:43] [INFO] Received AppInfo for 1364780
+[2025-12-01 13:42:43] [INFO] Processing app 1364780: Street Fighter™ 6
+[2025-12-01 13:42:43] [INFO] Found 10 DLCs listed for app 1364780
+[2025-12-01 13:42:43] [INFO] Received AppInfo for 1792750
+[2025-12-01 13:42:44] [INFO] Received AppInfo for 1792751
+[2025-12-01 13:42:44] [INFO] Adding DLC 2224460 ('Street Fighter™ 6 - Year 1 Character Pass') to list - it has NO depots
+[2025-12-01 13:42:45] [INFO] Received AppInfo for 2224461
+[2025-12-01 13:42:45] [INFO] Adding DLC 2224461 ('Street Fighter™ 6 - Year 1 Ultimate Pass') to list - it has NO depots
+[2025-12-01 13:42:45] [INFO] Received AppInfo for 2224462
+[2025-12-01 13:42:45] [INFO] Adding DLC 2224462 ('Street Fighter™ 6 - Outfit 1 Color 10 for Chun-Li, Jamie, Manon, Dee Jay, Juri, Ken') to list - it has NO depots
+[2025-12-01 13:42:46] [INFO] Received AppInfo for 2825190
+[2025-12-01 13:42:46] [INFO] Adding DLC 2825190 ('Street Fighter™ 6 - Year 2 Character Pass') to list - it has NO depots
+[2025-12-01 13:42:47] [INFO] Received AppInfo for 2825200
+[2025-12-01 13:42:47] [INFO] Adding DLC 2825200 ('Street Fighter™ 6 - Year 2 Ultimate Pass') to list - it has NO depots
+[2025-12-01 13:42:48] [INFO] Received AppInfo for 3401790
+[2025-12-01 13:42:48] [INFO] Adding DLC 3401790 ('Street Fighter™ 6 - Years 1-2 Fighters Edition Stages & Colors') to list - it has NO depots
+[2025-12-01 13:42:48] [INFO] Received AppInfo for 3410460
+[2025-12-01 13:42:48] [INFO] Adding DLC 3410460 ('Street Fighter™ 6 - Year 3 Character Pass') to list - it has NO depots
+[2025-12-01 13:42:49] [INFO] Received AppInfo for 3410470
+[2025-12-01 13:42:49] [INFO] Adding DLC 3410470 ('Street Fighter™ 6 - Year 3 Ultimate Pass') to list - it has NO depots
+[2025-12-01 13:42:49] [INFO] Dumping depot 1364781 for app 1364780
+[2025-12-01 13:42:49] [INFO] Requesting depot key for depot 1364781 using app context 1364780
+[2025-12-01 13:42:49] [INFO] Requesting depot key for 1364781 using app context 1364780
+[2025-12-01 13:42:49] [INFO] Depot key result for 1364781 (app context 1364780): OK
+[2025-12-01 13:42:49] [INFO] Starting to process depot 1364781 for app context 1364780
+[2025-12-01 13:42:49] [INFO] Processing 1 manifests for depot 1364781 with up to 4 at a time
+[2025-12-01 13:42:49] [INFO] [TrackDepotStart] Started tracking depot 1364781 for app 1364780 with 1 manifests
+[2025-12-01 13:42:49] [INFO] Manifest 4570939030172837518 exists for depot 1364781 branch 'public', skipping download.
+[2025-12-01 13:42:49] [WARNING] Manifest 4570939030172837518: Could not load existing manifest dumps\1364780\public\1364781_4570939030172837518.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:49] [INFO] Completed processing all manifests for depot 1364781
+[2025-12-01 13:42:49] [INFO] [TrackDepotCompletion] Depot 1364781 processed successfully
+[2025-12-01 13:42:50] [INFO] Appending 8 DLC entries to Lua files for parent app 1364780 across 1 processed branches.
+[2025-12-01 13:42:50] [INFO] Successfully appended 8 DLC entries to 1364780.lua in branch 'public'.
+[2025-12-01 13:42:50] [INFO] Creating zip archives for 1 branches of app 1364780 ('Street Fighter™ 6')
+[2025-12-01 13:42:50] [INFO] Found 10 DLCs listed for app 1364780
+[2025-12-01 13:42:50] [INFO] Adding DLC 2224460 ('Street Fighter™ 6 - Year 1 Character Pass') to list - it has NO depots
+[2025-12-01 13:42:50] [INFO] Adding DLC 2224461 ('Street Fighter™ 6 - Year 1 Ultimate Pass') to list - it has NO depots
+[2025-12-01 13:42:50] [INFO] Adding DLC 2224462 ('Street Fighter™ 6 - Outfit 1 Color 10 for Chun-Li, Jamie, Manon, Dee Jay, Juri, Ken') to list - it has NO depots
+[2025-12-01 13:42:50] [INFO] Adding DLC 2825190 ('Street Fighter™ 6 - Year 2 Character Pass') to list - it has NO depots
+[2025-12-01 13:42:50] [INFO] Adding DLC 2825200 ('Street Fighter™ 6 - Year 2 Ultimate Pass') to list - it has NO depots
+[2025-12-01 13:42:50] [INFO] Adding DLC 3401790 ('Street Fighter™ 6 - Years 1-2 Fighters Edition Stages & Colors') to list - it has NO depots
+[2025-12-01 13:42:50] [INFO] Adding DLC 3410460 ('Street Fighter™ 6 - Year 3 Character Pass') to list - it has NO depots
+[2025-12-01 13:42:50] [INFO] Adding DLC 3410470 ('Street Fighter™ 6 - Year 3 Ultimate Pass') to list - it has NO depots
+[2025-12-01 13:42:50] [INFO] SteamKit-only DLC detection found 8 DLCs without depots for app 1364780
+[2025-12-01 13:42:50] [INFO] Found app name from info file (dumps\1364780\1364780.info): Street Fighter™ 6
+[2025-12-01 13:42:50] [INFO] Using app name from SteamKit: Street Fighter™ 6
+[2025-12-01 13:42:50] [INFO] Appending 8 DLC entries to Lua files for app 1364780 across 1 processed branches.
+[2025-12-01 13:42:50] [INFO] Successfully appended 8 DLC entries to 1364780.lua in branch 'public'.
+[2025-12-01 13:42:50] [INFO] Zip archive already exists and no new manifests downloaded for branch 'public', skipping: dumps\1364780\1364780.public.2025-11-13_05-59-51.Street Fighter™ 6\1364780.zip
+[2025-12-01 13:42:50] [INFO] Cleaning up empty directories...
+[2025-12-01 13:42:50] [INFO] [TrackAppCompletion] App 1364780 (Street Fighter™ 6) processed successfully
+[2025-12-01 13:42:50] [INFO] Completely reset all branch state after app 1364780 processing completed
+[2025-12-01 13:42:50] [INFO] Processing DLC 1792750 - it has depots and is owned by the account
+[2025-12-01 13:42:50] [INFO] Processing app 1792750: Street Fighter™ 6: Fighting Ground
+[2025-12-01 13:42:50] [INFO] Processing DLC 1792750 - it has depots and is owned by the account
+[2025-12-01 13:42:50] [INFO] Dumping depot 1792750 for app 1792750
+[2025-12-01 13:42:50] [INFO] Requesting depot key for depot 1792750 using app context 1792750
+[2025-12-01 13:42:50] [INFO] Requesting depot key for 1792750 using app context 1792750
+[2025-12-01 13:42:51] [INFO] Depot key result for 1792750 (app context 1792750): OK
+[2025-12-01 13:42:51] [INFO] Starting to process depot 1792750 for app context 1792750
+[2025-12-01 13:42:51] [INFO] Processing 1 manifests for depot 1792750 with up to 4 at a time
+[2025-12-01 13:42:51] [INFO] [TrackDepotStart] Started tracking depot 1792750 for app 1792750 with 1 manifests
+[2025-12-01 13:42:51] [INFO] Manifest 6884397220835125615 exists for depot 1792750 branch 'public', skipping download.
+[2025-12-01 13:42:51] [WARNING] Manifest 6884397220835125615: Could not load existing manifest dumps\1792750\public\1792750_6884397220835125615.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:51] [INFO] Completed processing all manifests for depot 1792750
+[2025-12-01 13:42:51] [INFO] [TrackDepotCompletion] Depot 1792750 processed successfully
+[2025-12-01 13:42:52] [INFO] No DLCs found or fetched for app 1792750, skipping final Lua append step.
+[2025-12-01 13:42:52] [INFO] Creating zip archives for 1 branches of app 1792750 ('Street Fighter™ 6: Fighting Ground')
+[2025-12-01 13:42:52] [INFO] Found app name from info file (dumps\1792750\1792750.info): Street Fighter™ 6: Fighting Ground
+[2025-12-01 13:42:52] [INFO] Using app name from SteamKit: Street Fighter™ 6: Fighting Ground
+[2025-12-01 13:42:52] [INFO] No DLCs found or fetched for app 1792750, skipping DLC append step.
+[2025-12-01 13:42:52] [INFO] Zip archive already exists and no new manifests downloaded for branch 'public', skipping: dumps\1792750\1792750.public.2023-05-30_07-01-12.Street Fighter™ 6_ Fighting Ground\1792750.zip
+[2025-12-01 13:42:52] [INFO] Cleaning up empty directories...
+[2025-12-01 13:42:52] [INFO] [TrackAppCompletion] App 1792750 (Street Fighter™ 6: Fighting Ground) processed successfully
+[2025-12-01 13:42:52] [INFO] Completely reset all branch state after app 1792750 processing completed
+[2025-12-01 13:42:52] [INFO] Processing DLC 1792751 - it has depots and is owned by the account
+[2025-12-01 13:42:52] [INFO] Processing app 1792751: Street Fighter™ 6: World Tour
+[2025-12-01 13:42:52] [INFO] Processing DLC 1792751 - it has depots and is owned by the account
+[2025-12-01 13:42:52] [INFO] Dumping depot 1792751 for app 1792751
+[2025-12-01 13:42:52] [INFO] Requesting depot key for depot 1792751 using app context 1792751
+[2025-12-01 13:42:52] [INFO] Requesting depot key for 1792751 using app context 1792751
+[2025-12-01 13:42:52] [INFO] Depot key result for 1792751 (app context 1792751): OK
+[2025-12-01 13:42:52] [INFO] Starting to process depot 1792751 for app context 1792751
+[2025-12-01 13:42:52] [INFO] Processing 1 manifests for depot 1792751 with up to 4 at a time
+[2025-12-01 13:42:52] [INFO] [TrackDepotStart] Started tracking depot 1792751 for app 1792751 with 1 manifests
+[2025-12-01 13:42:52] [INFO] Manifest 6646887922669668163 exists for depot 1792751 branch 'public', skipping download.
+[2025-12-01 13:42:52] [WARNING] Manifest 6646887922669668163: Could not load existing manifest dumps\1792751\public\1792751_6646887922669668163.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:52] [INFO] Completed processing all manifests for depot 1792751
+[2025-12-01 13:42:52] [INFO] [TrackDepotCompletion] Depot 1792751 processed successfully
+[2025-12-01 13:42:53] [INFO] No DLCs found or fetched for app 1792751, skipping final Lua append step.
+[2025-12-01 13:42:53] [INFO] Creating zip archives for 1 branches of app 1792751 ('Street Fighter™ 6: World Tour')
+[2025-12-01 13:42:53] [INFO] Found app name from info file (dumps\1792751\1792751.info): Street Fighter™ 6: World Tour
+[2025-12-01 13:42:53] [INFO] Using app name from SteamKit: Street Fighter™ 6: World Tour
+[2025-12-01 13:42:53] [INFO] No DLCs found or fetched for app 1792751, skipping DLC append step.
+[2025-12-01 13:42:53] [INFO] Zip archive already exists and no new manifests downloaded for branch 'public', skipping: dumps\1792751\1792751.public.2023-05-30_07-00-58.Street Fighter™ 6_ World Tour\1792751.zip
+[2025-12-01 13:42:53] [INFO] Cleaning up empty directories...
+[2025-12-01 13:42:53] [INFO] [TrackAppCompletion] App 1792751 (Street Fighter™ 6: World Tour) processed successfully
+[2025-12-01 13:42:53] [INFO] Completely reset all branch state after app 1792751 processing completed
+[2025-12-01 13:42:53] [INFO] Skipping DLC 2825190 because it has no depots
+[2025-12-01 13:42:53] [INFO] Skipping DLC 3410460 because it has no depots
+[2025-12-01 13:42:54] [INFO] Received AppInfo for 2154900
+[2025-12-01 13:42:54] [INFO] Skipping app 2154900 because its type is 'demo'.
+[2025-12-01 13:42:54] [INFO] Received AppInfo for 730
+[2025-12-01 13:42:54] [INFO] Processing app 730: Counter-Strike 2
+[2025-12-01 13:42:54] [INFO] Found 4 DLCs listed for app 730
+[2025-12-01 13:42:55] [WARNING] Insufficient privileges for AppID 1490530 access token.
+[2025-12-01 13:42:55] [INFO] Received AppInfo for 1490530
+[2025-12-01 13:42:55] [INFO] Adding DLC 1490530 ('Counter-Strike: Global Offensive - Operation Broken Fang') to list - it has NO depots
+[2025-12-01 13:42:56] [INFO] Received AppInfo for 1766730
+[2025-12-01 13:42:56] [INFO] Adding DLC 1766730 ('CS:GO - Operation Riptide') to list - it has NO depots
+[2025-12-01 13:42:56] [INFO] Received AppInfo for 2279720
+[2025-12-01 13:42:56] [INFO] Adding DLC 2279720 ('Counter-Strike 2 (Limited Test)') to list - it has NO depots
+[2025-12-01 13:42:57] [INFO] Received AppInfo for 2279721
+[2025-12-01 13:42:57] [INFO] Dumping depot 732 for app 730
+[2025-12-01 13:42:57] [INFO] Requesting depot key for depot 732 using app context 730
+[2025-12-01 13:42:57] [INFO] Requesting depot key for 732 using app context 730
+[2025-12-01 13:42:58] [INFO] Depot key result for 732 (app context 730): OK
+[2025-12-01 13:42:58] [INFO] Starting to process depot 732 for app context 730
+[2025-12-01 13:42:58] [INFO] Processing 7 manifests for depot 732 with up to 4 at a time
+[2025-12-01 13:42:58] [INFO] [TrackDepotStart] Started tracking depot 732 for app 730 with 7 manifests
+[2025-12-01 13:42:58] [INFO] Manifest 5289214263727115270 exists for depot 732 branch '1.40.8.8', skipping download.
+[2025-12-01 13:42:58] [INFO] Manifest 2196348086376785588 exists for depot 732 branch 'public', skipping download.
+[2025-12-01 13:42:58] [INFO] Manifest 6314304446937576250 exists for depot 732 branch 'csgo_legacy', skipping download.
+[2025-12-01 13:42:58] [WARNING] Manifest 5289214263727115270: Could not load existing manifest dumps\730\1.40.8.8\732_5289214263727115270.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:58] [INFO] Manifest 5384752978584135997 exists for depot 732 branch 'demo_viewer', skipping download.
+[2025-12-01 13:42:58] [WARNING] Manifest 2196348086376785588: Could not load existing manifest dumps\730\public\732_2196348086376785588.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:58] [WARNING] Manifest 6314304446937576250: Could not load existing manifest dumps\730\csgo_legacy\732_6314304446937576250.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:58] [WARNING] Manifest 5384752978584135997: Could not load existing manifest dumps\730\demo_viewer\732_5384752978584135997.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:58] [INFO] Manifest 2850018657901504221 exists for depot 732 branch '1.41.2.1', skipping download.
+[2025-12-01 13:42:58] [INFO] Manifest 8882814519264542199 exists for depot 732 branch '1.41.2.6', skipping download.
+[2025-12-01 13:42:58] [INFO] Manifest 6314304446937576250 exists for depot 732 branch 'csgo', skipping download.
+[2025-12-01 13:42:58] [WARNING] Manifest 2850018657901504221: Could not load existing manifest dumps\730\1.41.2.1\732_2850018657901504221.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:58] [WARNING] Manifest 8882814519264542199: Could not load existing manifest dumps\730\1.41.2.6\732_8882814519264542199.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:58] [WARNING] Manifest 6314304446937576250: Could not load existing manifest dumps\730\csgo\732_6314304446937576250.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:58] [INFO] Completed processing all manifests for depot 732
+[2025-12-01 13:42:58] [INFO] [TrackDepotCompletion] Depot 732 processed successfully
+[2025-12-01 13:42:59] [INFO] Dumping depot 733 for app 730
+[2025-12-01 13:42:59] [INFO] Requesting depot key for depot 733 using app context 730
+[2025-12-01 13:42:59] [INFO] Requesting depot key for 733 using app context 730
+[2025-12-01 13:42:59] [INFO] Depot key result for 733 (app context 730): OK
+[2025-12-01 13:42:59] [INFO] Starting to process depot 733 for app context 730
+[2025-12-01 13:42:59] [INFO] Processing 7 manifests for depot 733 with up to 4 at a time
+[2025-12-01 13:42:59] [INFO] [TrackDepotStart] Started tracking depot 733 for app 730 with 7 manifests
+[2025-12-01 13:42:59] [INFO] Manifest 4424357332715496898 exists for depot 733 branch '1.40.8.8', skipping download.
+[2025-12-01 13:42:59] [INFO] Manifest 7990229043274008906 exists for depot 733 branch 'public', skipping download.
+[2025-12-01 13:42:59] [WARNING] Manifest 4424357332715496898: Could not load existing manifest dumps\730\1.40.8.8\733_4424357332715496898.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:59] [WARNING] Manifest 7990229043274008906: Could not load existing manifest dumps\730\public\733_7990229043274008906.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:59] [INFO] Manifest 5307013034211157537 exists for depot 733 branch '1.41.2.1', skipping download.
+[2025-12-01 13:42:59] [INFO] Manifest 7818492753742006607 exists for depot 733 branch 'csgo_legacy', skipping download.
+[2025-12-01 13:42:59] [INFO] Manifest 251384656344690626 exists for depot 733 branch '1.41.2.6', skipping download.
+[2025-12-01 13:42:59] [WARNING] Manifest 7818492753742006607: Could not load existing manifest dumps\730\csgo_legacy\733_7818492753742006607.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:59] [WARNING] Manifest 251384656344690626: Could not load existing manifest dumps\730\1.41.2.6\733_251384656344690626.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:59] [WARNING] Manifest 5307013034211157537: Could not load existing manifest dumps\730\1.41.2.1\733_5307013034211157537.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:59] [INFO] Manifest 7818492753742006607 exists for depot 733 branch 'csgo', skipping download.
+[2025-12-01 13:42:59] [INFO] Manifest 2103093205873127583 exists for depot 733 branch 'demo_viewer', skipping download.
+[2025-12-01 13:42:59] [WARNING] Manifest 7818492753742006607: Could not load existing manifest dumps\730\csgo\733_7818492753742006607.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:59] [WARNING] Manifest 2103093205873127583: Could not load existing manifest dumps\730\demo_viewer\733_2103093205873127583.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:42:59] [INFO] Completed processing all manifests for depot 733
+[2025-12-01 13:42:59] [INFO] [TrackDepotCompletion] Depot 733 processed successfully
+[2025-12-01 13:43:00] [INFO] Dumping depot 731 for app 730
+[2025-12-01 13:43:00] [INFO] Requesting depot key for depot 731 using app context 730
+[2025-12-01 13:43:00] [INFO] Requesting depot key for 731 using app context 730
+[2025-12-01 13:43:00] [INFO] Depot key result for 731 (app context 730): OK
+[2025-12-01 13:43:00] [INFO] Starting to process depot 731 for app context 730
+[2025-12-01 13:43:00] [INFO] Processing 7 manifests for depot 731 with up to 4 at a time
+[2025-12-01 13:43:00] [INFO] [TrackDepotStart] Started tracking depot 731 for app 730 with 7 manifests
+[2025-12-01 13:43:00] [INFO] Manifest 3750469884190945131 exists for depot 731 branch 'public', skipping download.
+[2025-12-01 13:43:00] [INFO] Manifest 1224088799001669801 exists for depot 731 branch 'csgo_legacy', skipping download.
+[2025-12-01 13:43:00] [INFO] Manifest 3779741820453041761 exists for depot 731 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:00] [WARNING] Manifest 3750469884190945131: Could not load existing manifest dumps\730\public\731_3750469884190945131.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:00] [WARNING] Manifest 3779741820453041761: Could not load existing manifest dumps\730\1.40.8.8\731_3779741820453041761.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:00] [INFO] Manifest 8917601652689682225 exists for depot 731 branch 'demo_viewer', skipping download.
+[2025-12-01 13:43:00] [INFO] Manifest 1056577228555620585 exists for depot 731 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:00] [WARNING] Manifest 1056577228555620585: Could not load existing manifest dumps\730\1.41.2.1\731_1056577228555620585.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:00] [INFO] Manifest 1224088799001669801 exists for depot 731 branch 'csgo', skipping download.
+[2025-12-01 13:43:00] [WARNING] Manifest 8917601652689682225: Could not load existing manifest dumps\730\demo_viewer\731_8917601652689682225.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:00] [INFO] Manifest 2142803724932272171 exists for depot 731 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:00] [WARNING] Manifest 2142803724932272171: Could not load existing manifest dumps\730\1.41.2.6\731_2142803724932272171.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:00] [WARNING] Manifest 1224088799001669801: Could not load existing manifest dumps\730\csgo_legacy\731_1224088799001669801.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:00] [WARNING] Manifest 1224088799001669801: Could not load existing manifest dumps\730\csgo\731_1224088799001669801.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:00] [INFO] Completed processing all manifests for depot 731
+[2025-12-01 13:43:00] [INFO] [TrackDepotCompletion] Depot 731 processed successfully
+[2025-12-01 13:43:01] [INFO] Dumping depot 734 for app 730
+[2025-12-01 13:43:01] [INFO] Requesting depot key for depot 734 using app context 730
+[2025-12-01 13:43:01] [INFO] Requesting depot key for 734 using app context 730
+[2025-12-01 13:43:02] [INFO] Depot key result for 734 (app context 730): OK
+[2025-12-01 13:43:02] [INFO] Starting to process depot 734 for app context 730
+[2025-12-01 13:43:02] [INFO] Processing 6 manifests for depot 734 with up to 4 at a time
+[2025-12-01 13:43:02] [INFO] [TrackDepotStart] Started tracking depot 734 for app 730 with 6 manifests
+[2025-12-01 13:43:02] [INFO] Manifest 6550547479118853889 exists for depot 734 branch 'public', skipping download.
+[2025-12-01 13:43:02] [INFO] Manifest 3343055176458696864 exists for depot 734 branch 'csgo_legacy', skipping download.
+[2025-12-01 13:43:02] [INFO] Manifest 1743061796871717542 exists for depot 734 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:02] [WARNING] Manifest 6550547479118853889: Could not load existing manifest dumps\730\public\734_6550547479118853889.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:02] [INFO] Manifest 7768479580354456865 exists for depot 734 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:02] [WARNING] Manifest 3343055176458696864: Could not load existing manifest dumps\730\csgo_legacy\734_3343055176458696864.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:02] [WARNING] Manifest 1743061796871717542: Could not load existing manifest dumps\730\1.41.2.1\734_1743061796871717542.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:02] [INFO] Manifest 750715863051465175 exists for depot 734 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:02] [WARNING] Manifest 7768479580354456865: Could not load existing manifest dumps\730\1.40.8.8\734_7768479580354456865.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:02] [INFO] Manifest 3343055176458696864 exists for depot 734 branch 'csgo', skipping download.
+[2025-12-01 13:43:02] [WARNING] Manifest 750715863051465175: Could not load existing manifest dumps\730\1.41.2.6\734_750715863051465175.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:02] [WARNING] Manifest 3343055176458696864: Could not load existing manifest dumps\730\csgo\734_3343055176458696864.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:02] [INFO] Completed processing all manifests for depot 734
+[2025-12-01 13:43:02] [INFO] [TrackDepotCompletion] Depot 734 processed successfully
+[2025-12-01 13:43:03] [INFO] Dumping depot 737 for app 730
+[2025-12-01 13:43:03] [INFO] Requesting depot key for depot 737 using app context 730
+[2025-12-01 13:43:03] [INFO] Requesting depot key for 737 using app context 730
+[2025-12-01 13:43:03] [INFO] Depot key result for 737 (app context 730): OK
+[2025-12-01 13:43:03] [INFO] Starting to process depot 737 for app context 730
+[2025-12-01 13:43:03] [INFO] Processing 6 manifests for depot 737 with up to 4 at a time
+[2025-12-01 13:43:03] [INFO] [TrackDepotStart] Started tracking depot 737 for app 730 with 6 manifests
+[2025-12-01 13:43:03] [INFO] Manifest 798700522577770541 exists for depot 737 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:03] [INFO] Manifest 681438505221656819 exists for depot 737 branch 'public', skipping download.
+[2025-12-01 13:43:03] [INFO] Manifest 8959772282070246004 exists for depot 737 branch 'csgo_legacy', skipping download.
+[2025-12-01 13:43:03] [INFO] Manifest 8932691733627569999 exists for depot 737 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:03] [WARNING] Manifest 681438505221656819: Could not load existing manifest dumps\730\public\737_681438505221656819.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:03] [WARNING] Manifest 8932691733627569999: Could not load existing manifest dumps\730\1.40.8.8\737_8932691733627569999.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:03] [WARNING] Manifest 8959772282070246004: Could not load existing manifest dumps\730\csgo_legacy\737_8959772282070246004.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:03] [WARNING] Manifest 798700522577770541: Could not load existing manifest dumps\730\1.41.2.1\737_798700522577770541.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:03] [INFO] Manifest 722264413330120610 exists for depot 737 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:03] [INFO] Manifest 8959772282070246004 exists for depot 737 branch 'csgo', skipping download.
+[2025-12-01 13:43:03] [WARNING] Manifest 722264413330120610: Could not load existing manifest dumps\730\1.41.2.6\737_722264413330120610.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:03] [WARNING] Manifest 8959772282070246004: Could not load existing manifest dumps\730\csgo\737_8959772282070246004.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:03] [INFO] Completed processing all manifests for depot 737
+[2025-12-01 13:43:03] [INFO] [TrackDepotCompletion] Depot 737 processed successfully
+[2025-12-01 13:43:04] [INFO] Dumping depot 738 for app 730
+[2025-12-01 13:43:04] [INFO] Requesting depot key for depot 738 using app context 730
+[2025-12-01 13:43:04] [INFO] Requesting depot key for 738 using app context 730
+[2025-12-01 13:43:04] [INFO] Depot key result for 738 (app context 730): OK
+[2025-12-01 13:43:04] [INFO] Starting to process depot 738 for app context 730
+[2025-12-01 13:43:04] [INFO] Processing 6 manifests for depot 738 with up to 4 at a time
+[2025-12-01 13:43:04] [INFO] [TrackDepotStart] Started tracking depot 738 for app 730 with 6 manifests
+[2025-12-01 13:43:04] [INFO] Manifest 7186665656985761987 exists for depot 738 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:04] [INFO] Manifest 7431333290105294559 exists for depot 738 branch 'public', skipping download.
+[2025-12-01 13:43:04] [WARNING] Manifest 7186665656985761987: Could not load existing manifest dumps\730\1.41.2.1\738_7186665656985761987.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:04] [INFO] Manifest 5738276695377038638 exists for depot 738 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:04] [INFO] Manifest 313951540668567317 exists for depot 738 branch 'csgo_legacy', skipping download.
+[2025-12-01 13:43:04] [WARNING] Manifest 7431333290105294559: Could not load existing manifest dumps\730\public\738_7431333290105294559.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:04] [INFO] Manifest 7275019170379505640 exists for depot 738 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:04] [WARNING] Manifest 313951540668567317: Could not load existing manifest dumps\730\csgo_legacy\738_313951540668567317.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:04] [INFO] Manifest 313951540668567317 exists for depot 738 branch 'csgo', skipping download.
+[2025-12-01 13:43:04] [WARNING] Manifest 5738276695377038638: Could not load existing manifest dumps\730\1.40.8.8\738_5738276695377038638.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:04] [WARNING] Manifest 7275019170379505640: Could not load existing manifest dumps\730\1.41.2.6\738_7275019170379505640.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:04] [WARNING] Manifest 313951540668567317: Could not load existing manifest dumps\730\csgo\738_313951540668567317.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:04] [INFO] Completed processing all manifests for depot 738
+[2025-12-01 13:43:04] [INFO] [TrackDepotCompletion] Depot 738 processed successfully
+[2025-12-01 13:43:05] [INFO] Dumping depot 2347770 for app 730
+[2025-12-01 13:43:05] [INFO] Requesting depot key for depot 2347770 using app context 730
+[2025-12-01 13:43:05] [INFO] Requesting depot key for 2347770 using app context 730
+[2025-12-01 13:43:06] [INFO] Depot key result for 2347770 (app context 730): OK
+[2025-12-01 13:43:06] [INFO] Starting to process depot 2347770 for app context 730
+[2025-12-01 13:43:06] [INFO] Processing 4 manifests for depot 2347770 with up to 4 at a time
+[2025-12-01 13:43:06] [INFO] [TrackDepotStart] Started tracking depot 2347770 for app 730 with 4 manifests
+[2025-12-01 13:43:06] [INFO] Manifest 4154402712778649111 exists for depot 2347770 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:06] [INFO] Manifest 5023020258185551340 exists for depot 2347770 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:06] [INFO] Manifest 3846678211997051446 exists for depot 2347770 branch 'public', skipping download.
+[2025-12-01 13:43:06] [WARNING] Manifest 3846678211997051446: Could not load existing manifest dumps\730\public\2347770_3846678211997051446.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:06] [INFO] Manifest 2600506335270172649 exists for depot 2347770 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:06] [WARNING] Manifest 5023020258185551340: Could not load existing manifest dumps\730\1.40.8.8\2347770_5023020258185551340.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:06] [WARNING] Manifest 4154402712778649111: Could not load existing manifest dumps\730\1.41.2.6\2347770_4154402712778649111.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:06] [WARNING] Manifest 2600506335270172649: Could not load existing manifest dumps\730\1.41.2.1\2347770_2600506335270172649.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:06] [INFO] Completed processing all manifests for depot 2347770
+[2025-12-01 13:43:06] [INFO] [TrackDepotCompletion] Depot 2347770 processed successfully
+[2025-12-01 13:43:07] [INFO] Dumping depot 2347771 for app 730
+[2025-12-01 13:43:07] [INFO] Requesting depot key for depot 2347771 using app context 730
+[2025-12-01 13:43:07] [INFO] Requesting depot key for 2347771 using app context 730
+[2025-12-01 13:43:07] [INFO] Depot key result for 2347771 (app context 730): OK
+[2025-12-01 13:43:07] [INFO] Starting to process depot 2347771 for app context 730
+[2025-12-01 13:43:07] [INFO] Processing 4 manifests for depot 2347771 with up to 4 at a time
+[2025-12-01 13:43:07] [INFO] [TrackDepotStart] Started tracking depot 2347771 for app 730 with 4 manifests
+[2025-12-01 13:43:07] [INFO] Manifest 2189973284914415964 exists for depot 2347771 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:07] [INFO] Manifest 3222539360393238958 exists for depot 2347771 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:07] [INFO] Manifest 5024966808099071400 exists for depot 2347771 branch 'public', skipping download.
+[2025-12-01 13:43:07] [INFO] Manifest 366892905078765270 exists for depot 2347771 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:07] [WARNING] Manifest 2189973284914415964: Could not load existing manifest dumps\730\1.41.2.6\2347771_2189973284914415964.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:07] [WARNING] Manifest 5024966808099071400: Could not load existing manifest dumps\730\public\2347771_5024966808099071400.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:07] [WARNING] Manifest 366892905078765270: Could not load existing manifest dumps\730\1.40.8.8\2347771_366892905078765270.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:07] [WARNING] Manifest 3222539360393238958: Could not load existing manifest dumps\730\1.41.2.1\2347771_3222539360393238958.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:07] [INFO] Completed processing all manifests for depot 2347771
+[2025-12-01 13:43:07] [INFO] [TrackDepotCompletion] Depot 2347771 processed successfully
+[2025-12-01 13:43:08] [INFO] Dumping depot 2347772 for app 730
+[2025-12-01 13:43:08] [INFO] Requesting depot key for depot 2347772 using app context 730
+[2025-12-01 13:43:08] [INFO] Requesting depot key for 2347772 using app context 730
+[2025-12-01 13:43:08] [INFO] Depot key result for 2347772 (app context 730): OK
+[2025-12-01 13:43:08] [INFO] Starting to process depot 2347772 for app context 730
+[2025-12-01 13:43:08] [INFO] Processing 4 manifests for depot 2347772 with up to 4 at a time
+[2025-12-01 13:43:08] [INFO] [TrackDepotStart] Started tracking depot 2347772 for app 730 with 4 manifests
+[2025-12-01 13:43:08] [INFO] Manifest 4427303554736365309 exists for depot 2347772 branch 'public', skipping download.
+[2025-12-01 13:43:08] [INFO] Manifest 4427303554736365309 exists for depot 2347772 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:08] [INFO] Manifest 4427303554736365309 exists for depot 2347772 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:08] [INFO] Manifest 4427303554736365309 exists for depot 2347772 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:08] [WARNING] Manifest 4427303554736365309: Could not load existing manifest dumps\730\public\2347772_4427303554736365309.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:08] [WARNING] Manifest 4427303554736365309: Could not load existing manifest dumps\730\1.41.2.6\2347772_4427303554736365309.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:08] [WARNING] Manifest 4427303554736365309: Could not load existing manifest dumps\730\1.40.8.8\2347772_4427303554736365309.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:08] [WARNING] Manifest 4427303554736365309: Could not load existing manifest dumps\730\1.41.2.1\2347772_4427303554736365309.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:08] [INFO] Completed processing all manifests for depot 2347772
+[2025-12-01 13:43:08] [INFO] [TrackDepotCompletion] Depot 2347772 processed successfully
+[2025-12-01 13:43:09] [INFO] Dumping depot 2347773 for app 730
+[2025-12-01 13:43:09] [INFO] Requesting depot key for depot 2347773 using app context 730
+[2025-12-01 13:43:09] [INFO] Requesting depot key for 2347773 using app context 730
+[2025-12-01 13:43:10] [INFO] Depot key result for 2347773 (app context 730): OK
+[2025-12-01 13:43:10] [INFO] Starting to process depot 2347773 for app context 730
+[2025-12-01 13:43:10] [INFO] Processing 4 manifests for depot 2347773 with up to 4 at a time
+[2025-12-01 13:43:10] [INFO] [TrackDepotStart] Started tracking depot 2347773 for app 730 with 4 manifests
+[2025-12-01 13:43:10] [INFO] Manifest 5441743006850906281 exists for depot 2347773 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:10] [INFO] Manifest 7686452975420852479 exists for depot 2347773 branch 'public', skipping download.
+[2025-12-01 13:43:10] [INFO] Manifest 6261982168194353241 exists for depot 2347773 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:10] [INFO] Manifest 9200990553433045809 exists for depot 2347773 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:10] [WARNING] Manifest 5441743006850906281: Could not load existing manifest dumps\730\1.41.2.6\2347773_5441743006850906281.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:10] [WARNING] Manifest 7686452975420852479: Could not load existing manifest dumps\730\public\2347773_7686452975420852479.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:10] [WARNING] Manifest 6261982168194353241: Could not load existing manifest dumps\730\1.40.8.8\2347773_6261982168194353241.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:10] [WARNING] Manifest 9200990553433045809: Could not load existing manifest dumps\730\1.41.2.1\2347773_9200990553433045809.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:10] [INFO] Completed processing all manifests for depot 2347773
+[2025-12-01 13:43:10] [INFO] [TrackDepotCompletion] Depot 2347773 processed successfully
+[2025-12-01 13:43:11] [INFO] Dumping depot 2347774 for app 730
+[2025-12-01 13:43:11] [INFO] Requesting depot key for depot 2347774 using app context 730
+[2025-12-01 13:43:11] [INFO] Requesting depot key for 2347774 using app context 730
+[2025-12-01 13:43:11] [INFO] Depot key result for 2347774 (app context 730): OK
+[2025-12-01 13:43:11] [INFO] Starting to process depot 2347774 for app context 730
+[2025-12-01 13:43:11] [INFO] Processing 4 manifests for depot 2347774 with up to 4 at a time
+[2025-12-01 13:43:11] [INFO] [TrackDepotStart] Started tracking depot 2347774 for app 730 with 4 manifests
+[2025-12-01 13:43:11] [INFO] Manifest 1657392154061701194 exists for depot 2347774 branch 'public', skipping download.
+[2025-12-01 13:43:11] [INFO] Manifest 1657392154061701194 exists for depot 2347774 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:11] [INFO] Manifest 2710000399235967142 exists for depot 2347774 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:11] [INFO] Manifest 4816076065582500038 exists for depot 2347774 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:11] [WARNING] Manifest 1657392154061701194: Could not load existing manifest dumps\730\public\2347774_1657392154061701194.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:11] [WARNING] Manifest 2710000399235967142: Could not load existing manifest dumps\730\1.40.8.8\2347774_2710000399235967142.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:11] [WARNING] Manifest 1657392154061701194: Could not load existing manifest dumps\730\1.41.2.6\2347774_1657392154061701194.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:11] [WARNING] Manifest 4816076065582500038: Could not load existing manifest dumps\730\1.41.2.1\2347774_4816076065582500038.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:11] [INFO] Completed processing all manifests for depot 2347774
+[2025-12-01 13:43:11] [INFO] [TrackDepotCompletion] Depot 2347774 processed successfully
+[2025-12-01 13:43:12] [INFO] Dumping depot 2347779 for app 730
+[2025-12-01 13:43:12] [INFO] Requesting depot key for depot 2347779 using app context 730
+[2025-12-01 13:43:12] [INFO] Requesting depot key for 2347779 using app context 730
+[2025-12-01 13:43:12] [INFO] Depot key result for 2347779 (app context 730): OK
+[2025-12-01 13:43:12] [INFO] Starting to process depot 2347779 for app context 730
+[2025-12-01 13:43:12] [INFO] Processing 4 manifests for depot 2347779 with up to 4 at a time
+[2025-12-01 13:43:12] [INFO] [TrackDepotStart] Started tracking depot 2347779 for app 730 with 4 manifests
+[2025-12-01 13:43:12] [INFO] Manifest 4972352498684276294 exists for depot 2347779 branch '1.41.2.6', skipping download.
+[2025-12-01 13:43:12] [INFO] Manifest 8417699592807357275 exists for depot 2347779 branch '1.41.2.1', skipping download.
+[2025-12-01 13:43:12] [INFO] Manifest 1936241813406914436 exists for depot 2347779 branch '1.40.8.8', skipping download.
+[2025-12-01 13:43:12] [INFO] Manifest 8476213187790922907 exists for depot 2347779 branch 'public', skipping download.
+[2025-12-01 13:43:12] [WARNING] Manifest 8417699592807357275: Could not load existing manifest dumps\730\1.41.2.1\2347779_8417699592807357275.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:12] [WARNING] Manifest 1936241813406914436: Could not load existing manifest dumps\730\1.40.8.8\2347779_1936241813406914436.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:12] [WARNING] Manifest 8476213187790922907: Could not load existing manifest dumps\730\public\2347779_8476213187790922907.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:12] [WARNING] Manifest 4972352498684276294: Could not load existing manifest dumps\730\1.41.2.6\2347779_4972352498684276294.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:12] [INFO] Completed processing all manifests for depot 2347779
+[2025-12-01 13:43:12] [INFO] [TrackDepotCompletion] Depot 2347779 processed successfully
+[2025-12-01 13:43:13] [INFO] Appending 3 DLC entries to Lua files for parent app 730 across 7 processed branches.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch 'csgo'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch 'demo_viewer'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch '1.41.2.6'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch 'csgo_legacy'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch '1.41.2.1'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch 'public'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch '1.40.8.8'.
+[2025-12-01 13:43:13] [INFO] Creating zip archives for 7 branches of app 730 ('Counter-Strike 2')
+[2025-12-01 13:43:13] [INFO] Found 4 DLCs listed for app 730
+[2025-12-01 13:43:13] [INFO] Adding DLC 1490530 ('Counter-Strike: Global Offensive - Operation Broken Fang') to list - it has NO depots
+[2025-12-01 13:43:13] [INFO] Adding DLC 1766730 ('CS:GO - Operation Riptide') to list - it has NO depots
+[2025-12-01 13:43:13] [INFO] Adding DLC 2279720 ('Counter-Strike 2 (Limited Test)') to list - it has NO depots
+[2025-12-01 13:43:13] [INFO] SteamKit-only DLC detection found 3 DLCs without depots for app 730
+[2025-12-01 13:43:13] [INFO] Found app name from info file (dumps\730\730.info): Counter-Strike 2
+[2025-12-01 13:43:13] [INFO] Using app name from SteamKit: Counter-Strike 2
+[2025-12-01 13:43:13] [INFO] Appending 3 DLC entries to Lua files for app 730 across 7 processed branches.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch 'csgo'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch 'demo_viewer'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch '1.41.2.6'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch 'csgo_legacy'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch '1.41.2.1'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch 'public'.
+[2025-12-01 13:43:13] [INFO] Successfully appended 3 DLC entries to 730.lua in branch '1.40.8.8'.
+[2025-12-01 13:43:13] [INFO] Zip archive already exists and no new manifests downloaded for branch 'csgo', skipping: dumps\730\730.csgo.2025-11-25_21-34-53.Counter-Strike 2\730.zip
+[2025-12-01 13:43:13] [INFO] Zip archive already exists and no new manifests downloaded for branch 'demo_viewer', skipping: dumps\730\730.demo_viewer.2025-11-25_21-34-53.Counter-Strike 2\730.zip
+[2025-12-01 13:43:13] [INFO] Zip archive already exists and no new manifests downloaded for branch '1.41.2.6', skipping: dumps\730\730.1.41.2.6.2025-11-25_21-34-53.Counter-Strike 2\730.zip
+[2025-12-01 13:43:13] [INFO] Zip archive already exists and no new manifests downloaded for branch 'csgo_legacy', skipping: dumps\730\730.csgo_legacy.2025-11-25_21-34-53.Counter-Strike 2\730.zip
+[2025-12-01 13:43:13] [INFO] Zip archive already exists and no new manifests downloaded for branch '1.41.2.1', skipping: dumps\730\730.1.41.2.1.2025-11-25_21-34-53.Counter-Strike 2\730.zip
+[2025-12-01 13:43:13] [INFO] Zip archive already exists and no new manifests downloaded for branch 'public', skipping: dumps\730\730.public.2025-11-25_21-34-53.Counter-Strike 2\730.zip
+[2025-12-01 13:43:13] [INFO] Zip archive already exists and no new manifests downloaded for branch '1.40.8.8', skipping: dumps\730\730.1.40.8.8.2025-11-25_21-34-53.Counter-Strike 2\730.zip
+[2025-12-01 13:43:13] [INFO] Cleaning up empty directories...
+[2025-12-01 13:43:13] [INFO] [TrackAppCompletion] App 730 (Counter-Strike 2) processed successfully
+[2025-12-01 13:43:13] [INFO] Completely reset all branch state after app 730 processing completed
+[2025-12-01 13:43:13] [INFO] Skipping DLC 2279720 because it has no depots
+[2025-12-01 13:43:13] [INFO] Skipping DLC 2279721 because it has no depots
+[2025-12-01 13:43:14] [INFO] Received AppInfo for 2507950
+[2025-12-01 13:43:14] [INFO] Processing app 2507950: Delta Force
+[2025-12-01 13:43:14] [INFO] Found 1 DLCs listed for app 2507950
+[2025-12-01 13:43:15] [INFO] Received AppInfo for 2918370
+[2025-12-01 13:43:15] [INFO] Dumping depot 2507952 for app 2507950
+[2025-12-01 13:43:15] [INFO] Requesting depot key for depot 2507952 using app context 2507950
+[2025-12-01 13:43:15] [INFO] Requesting depot key for 2507952 using app context 2507950
+[2025-12-01 13:43:15] [INFO] Depot key result for 2507952 (app context 2507950): OK
+[2025-12-01 13:43:15] [INFO] Starting to process depot 2507952 for app context 2507950
+[2025-12-01 13:43:15] [INFO] Processing 1 manifests for depot 2507952 with up to 4 at a time
+[2025-12-01 13:43:15] [INFO] [TrackDepotStart] Started tracking depot 2507952 for app 2507950 with 1 manifests
+[2025-12-01 13:43:15] [INFO] Manifest 6858187304555701780 exists for depot 2507952 branch 'public', skipping download.
+[2025-12-01 13:43:15] [WARNING] Manifest 6858187304555701780: Could not load existing manifest dumps\2507950\public\2507952_6858187304555701780.manifest (Util.LoadManifestFromFile returned null).
+[2025-12-01 13:43:15] [INFO] Completed processing all manifests for depot 2507952
+[2025-12-01 13:43:15] [INFO] [TrackDepotCompletion] Depot 2507952 processed successfully
+[2025-12-01 13:43:16] [INFO] No DLCs found or fetched for app 2507950, skipping final Lua append step.
+[2025-12-01 13:43:16] [INFO] Creating zip archives for 1 branches of app 2507950 ('Delta Force')
+[2025-12-01 13:43:16] [INFO] Found 1 DLCs listed for app 2507950
+[2025-12-01 13:43:16] [INFO] SteamKit-only DLC detection found 0 DLCs without depots for app 2507950
+[2025-12-01 13:43:16] [INFO] Found app name from info file (dumps\2507950\2507950.info): Delta Force
+[2025-12-01 13:43:16] [INFO] Using app name from SteamKit: Delta Force
+[2025-12-01 13:43:16] [INFO] No DLCs found or fetched for app 2507950, skipping DLC append step.
+[2025-12-01 13:43:16] [INFO] Zip archive already exists and no new manifests downloaded for branch 'public', skipping: dumps\2507950\2507950.public.2025-11-20_04-11-31.Delta Force\2507950.zip
+[2025-12-01 13:43:16] [INFO] Cleaning up empty directories...
+[2025-12-01 13:43:16] [INFO] [TrackAppCompletion] App 2507950 (Delta Force) processed successfully
+[2025-12-01 13:43:16] [INFO] Completely reset all branch state after app 2507950 processing completed
+[2025-12-01 13:43:16] [INFO] Disconnecting from Steam3...
+[2025-12-01 13:43:16] [INFO] Logging off Steam user.
+[2025-12-01 13:43:16] [INFO] SteamClient disconnected.
+[2025-12-01 13:43:16] [INFO] Steam disconnected. UserInitiated=True, IsConnectionRecovery=False, ExpectingRemoteDisconnect=False
+[2025-12-01 13:43:16] [INFO] Disconnected from Steam as expected or user-initiated.
+[2025-12-01 13:43:16] [INFO] Steam3 disconnected.
