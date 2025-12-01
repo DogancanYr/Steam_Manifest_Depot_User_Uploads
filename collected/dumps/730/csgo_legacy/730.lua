@@ -15,6 +15,8 @@ addappid(738, 1, "fbc1a292c9b75e33512ed82476267efbf34f1ed1b177651ed8b091cf7174d1
 setManifestid(738, "313951540668567317", 0)
 
 
+
+
 addappid(1490530) -- Counter-Strike: Global Offensive - Operation Broken Fang
 addappid(1766730) -- CS:GO - Operation Riptide
 addappid(2279720) -- Counter-Strike 2 (Limited Test)
