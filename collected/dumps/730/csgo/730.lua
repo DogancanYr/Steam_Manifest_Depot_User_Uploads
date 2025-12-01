@@ -9,12 +9,10 @@ addappid(734, 1, "54fd243c5463c16ec7d32b5b4c7b792b3f2d3f75009ac3e81135ff999b5618
 setManifestid(734, "3343055176458696864", 0)
 addappid(735, 1, "a0ef69f0cf8abd70aa9ed79755fbe4d98cf7c6723ba9e0c66e0f7102e49541e6")
 setManifestid(735, "3867231304834558645", 0)
-
-
-
-
-
-
+addappid(737, 1, "c80f96efa325374c18c6d5d63ccd2687b1680a908c6def5c5c808e695f1ddbf9")
+setManifestid(737, "8959772282070246004", 0)
+addappid(738, 1, "fbc1a292c9b75e33512ed82476267efbf34f1ed1b177651ed8b091cf7174d183")
+setManifestid(738, "313951540668567317", 0)
 
 
 addappid(1490530) -- Counter-Strike: Global Offensive - Operation Broken Fang

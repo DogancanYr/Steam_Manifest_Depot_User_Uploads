@@ -1,0 +1,13 @@
+addappid(1364780)
+addappid(1364781, 1, "cfec39716b5a5cae49b52b5c0e01e6db93356ee3df5a0d87590fd811ab6d06e1")
+setManifestid(1364781, "4570939030172837518", 0)
+
+
+addappid(2224460) -- Street Fighter™ 6 - Year 1 Character Pass
+addappid(2224461) -- Street Fighter™ 6 - Year 1 Ultimate Pass
+addappid(2224462) -- Street Fighter™ 6 - Outfit 1 Color 10 for Chun-Li, Jamie, Manon, Dee Jay, Juri, Ken
+addappid(2825190) -- Street Fighter™ 6 - Year 2 Character Pass
+addappid(2825200) -- Street Fighter™ 6 - Year 2 Ultimate Pass
+addappid(3401790) -- Street Fighter™ 6 - Years 1-2 Fighters Edition Stages & Colors
+addappid(3410460) -- Street Fighter™ 6 - Year 3 Character Pass
+addappid(3410470) -- Street Fighter™ 6 - Year 3 Ultimate Pass
